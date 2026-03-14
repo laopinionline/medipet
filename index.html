@@ -872,6 +872,7 @@
             <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Nombre *</label><input type="text" id="mMascota" placeholder="Simba" class="modal-input"></div>
             <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Raza</label><input type="text" id="mRaza" placeholder="Golden Retriever" class="modal-input"></div>
           </div>
+          <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Fecha de nacimiento de la mascota</label><input type="date" id="mFechaMascota" class="modal-input"></div>
         </div>
         <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Plan</label>
           <select id="mPlan" class="modal-input">
@@ -974,6 +975,7 @@ async function registrarAfiliado() {
   const mascota = document.getElementById('mMascota').value.trim();
   const raza    = document.getElementById('mRaza').value.trim();
   const plan    = document.getElementById('mPlan').value;
+  const fechaMascota = document.getElementById('mFechaMascota').value;
   const fotoEl  = document.getElementById('mFoto');
   const errEl   = document.getElementById('modalError');
   const btn     = document.getElementById('btnRegModal');
@@ -1018,7 +1020,7 @@ async function registrarAfiliado() {
       uid, nombre, apellido, email, telefono: tel, fechaNacimiento: fechaNac,
       rol: 'afiliado', estado: 'pendiente',
       plan: plan || 'Sin definir',
-      mascota: { nombre: mascota, raza, foto: fotoURL },
+      mascota: { nombre: mascota, raza, fechaNacimiento: fechaMascota, foto: fotoURL },
       creadoEn: firebase.firestore.FieldValue.serverTimestamp()
     });
 
