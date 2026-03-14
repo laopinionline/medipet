@@ -619,7 +619,7 @@
     <li><a href="#como">Cómo funciona</a></li>
     <li><a href="#porque">Por qué MEDIPet</a></li>
     <li><a href="https://laopinionline.github.io/medipet-app/" class="nav-cta" style="background:transparent;border:2px solid var(--azul-principal);color:var(--azul-principal) !important;margin-right:6px;">Zona de afiliados</a></li>
-    <li><a href="https://laopinionline.github.io/medipet-app/?registro=1" class="nav-cta">Quiero afiliarme</a></li>
+    <li><a href="#" onclick="abrirModal();return false;" class="nav-cta">Quiero afiliarme</a></li>
   </ul>
   <div class="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -636,7 +636,7 @@
       <h1>Tu mascota,<br><em>siempre cuidada.</em></h1>
       <p>El primer plan de salud para mascotas en Pergamino.</p>
       <div class="hero-btns">
-        <a href="https://laopinionline.github.io/medipet-app/?registro=1" class="btn-primary">Quiero mi plan</a>
+        <a href="#" onclick="abrirModal();return false;" class="btn-primary">Quiero mi plan</a>
         <a href="#planes" class="btn-outline">Ver coberturas</a>
         <a href="https://laopinionline.github.io/medipet-app/" class="btn-outline" style="opacity:0.7;">Zona de afiliados →</a>
       </div>
@@ -705,7 +705,7 @@
           <li><span class="check">✓</span> Atención presencial en Pergamino</li>
           <li><span class="check">✓</span> Carnet MEDIPet digital</li>
         </ul>
-        <a href="https://laopinionline.github.io/medipet-app/?plan=Basico" class="btn-plan btn-plan-light">Empezar con Básico</a>
+        <a href="#" onclick="abrirModal('Básico');return false;" class="btn-plan btn-plan-light">Empezar con Básico</a>
       </div>
 
       <!-- COMPLETO (destacado) -->
@@ -724,7 +724,7 @@
           <li><span class="check">✓</span> Castración incluida</li>
           <li><span class="check">✓</span> Atención de urgencias 24h</li>
         </ul>
-        <a href="https://laopinionline.github.io/medipet-app/?plan=Completo" class="btn-plan btn-plan-dark">Quiero el plan Completo</a>
+        <a href="#" onclick="abrirModal('Completo');return false;" class="btn-plan btn-plan-dark">Quiero el plan Completo</a>
       </div>
 
       <!-- PREMIUM -->
@@ -742,7 +742,7 @@
           <li><span class="check">✓</span> Cobertura hasta $3.000.000</li>
           <li><span class="check">✓</span> Cremación incluida</li>
         </ul>
-        <a href="https://laopinionline.github.io/medipet-app/?plan=Premium" class="btn-plan btn-plan-light">Quiero el Premium</a>
+        <a href="#" onclick="abrirModal('Premium');return false;" class="btn-plan btn-plan-light">Quiero el Premium</a>
       </div>
     </div>
   </div>
@@ -845,8 +845,176 @@
 <div class="cta-final">
   <h2 class="fade-up">¿Tu mascota ya tiene su plan?</h2>
   <p class="fade-up">Afiliarte tarda 3 minutos. El carnet llega en 24 horas. La tranquilidad, para siempre.</p>
-  <a href="https://laopinionline.github.io/medipet-app/?registro=1" class="btn-primary fade-up">Quiero afiliarme ahora</a>
+  <a href="#" onclick="abrirModal();return false;" class="btn-primary fade-up">Quiero afiliarme ahora</a>
 </div>
+
+<!-- MODAL REGISTRO FIREBASE -->
+<div class="modal-overlay" id="modalRegistro" onclick="if(event.target===this)cerrarModal()">
+  <div class="modal" style="max-width:500px;">
+    <button class="modal-close" onclick="cerrarModal()">✕</button>
+
+    <!-- PASO 1: DATOS -->
+    <div id="pasoRegistro">
+      <h3 style="font-size:1.3rem;font-weight:900;color:#0D1B3E;margin-bottom:4px;">Afiliate a MEDIPet 🐾</h3>
+      <p style="font-size:0.8rem;color:#5a6a8a;margin-bottom:20px;">Completá tus datos. Tu carnet digital llega en 24hs.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Nombre *</label><input type="text" id="mNombre" placeholder="Juan" class="modal-input"></div>
+          <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Apellido</label><input type="text" id="mApellido" placeholder="Pérez" class="modal-input"></div>
+        </div>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Email *</label><input type="email" id="mEmail" placeholder="juan@ejemplo.com" class="modal-input"></div>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">WhatsApp / Teléfono</label><input type="tel" id="mTel" placeholder="(02477) 000-000" class="modal-input"></div>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Contraseña * <span style="font-weight:400;color:#9ca3af;">(mín. 6 caracteres)</span></label><input type="password" id="mPass" placeholder="••••••••" class="modal-input"></div>
+        <div style="border-top:1px solid #EBF3FC;padding-top:12px;">
+          <p style="font-size:0.72rem;font-weight:800;color:#0D1B3E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Tu mascota</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Nombre *</label><input type="text" id="mMascota" placeholder="Simba" class="modal-input"></div>
+            <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Raza</label><input type="text" id="mRaza" placeholder="Golden Retriever" class="modal-input"></div>
+          </div>
+        </div>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Plan</label>
+          <select id="mPlan" class="modal-input">
+            <option value="">Elegir plan...</option>
+            <option value="Básico">Básico — $16.000/mes</option>
+            <option value="Completo">Completo — $45.000/mes</option>
+            <option value="Premium">Premium — $90.000/mes</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;background:#EBF3FC;border-radius:10px;padding:10px 14px;font-size:0.82rem;font-weight:700;color:#1A5FB4;border:2px dashed rgba(26,95,180,0.2);" for="mFoto">
+            📷 &nbsp;Foto de tu mascota (opcional)
+          </label>
+          <input type="file" id="mFoto" accept="image/*" capture="environment" style="display:none" onchange="previewModalFoto(this)">
+          <img id="mFotoPreview" src="" alt="" style="width:72px;height:72px;border-radius:50%;object-fit:cover;margin-top:8px;display:none;border:3px solid #5BA3E8;">
+          <p style="font-size:0.7rem;color:#9ca3af;margin-top:4px;">Aparecerá en tu carnet digital.</p>
+        </div>
+        <button onclick="registrarAfiliado()" class="btn-form" id="btnRegModal">Crear mi cuenta →</button>
+        <p id="modalError" style="font-size:0.78rem;color:#ef4444;font-weight:600;min-height:16px;"></p>
+      </div>
+      <p style="text-align:center;font-size:0.78rem;margin-top:12px;color:#5a6a8a;">
+        ¿Ya tenés cuenta? <a href="https://laopinionline.github.io/medipet-app/" style="color:#1A5FB4;font-weight:700;">Ingresá acá →</a>
+      </p>
+    </div>
+
+    <!-- ÉXITO -->
+    <div id="pasoExito" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:3.5rem;margin-bottom:16px;">🎉</div>
+      <h3 style="font-size:1.3rem;font-weight:900;color:#0D1B3E;margin-bottom:10px;">¡Listo!</h3>
+      <p style="color:#5a6a8a;font-size:0.9rem;line-height:1.6;">Tu solicitud fue recibida. El equipo de MEDIPet la va a revisar y activar tu cuenta en las próximas horas.</p>
+      <a href="https://laopinionline.github.io/medipet-app/" style="display:inline-block;margin-top:20px;background:#1A5FB4;color:white;padding:12px 28px;border-radius:12px;font-weight:800;font-size:0.9rem;text-decoration:none;">Ver mi carnet →</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-input{width:100%;padding:11px 13px;border:2px solid rgba(26,95,180,0.15);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:600;color:#1a2340;background:#F5F7FA;outline:none;transition:border-color 0.2s;}
+.modal-input:focus{border-color:#2272D9;background:white;}
+</style>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+<script>
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey:"AIzaSyBW3nLFqr55xYN16rSpapqIb6yVnyKbp-4",
+    authDomain:"medipet-c3a4d.firebaseapp.com",
+    projectId:"medipet-c3a4d",
+    storageBucket:"medipet-c3a4d.firebasestorage.app",
+    messagingSenderId:"893304150807",
+    appId:"1:893304150807:web:4563f00e1a2a856124b552"
+  });
+}
+const _auth = firebase.auth();
+const _db   = firebase.firestore();
+const _st   = firebase.storage();
+
+function abrirModal(plan) {
+  document.getElementById('pasoRegistro').style.display = 'block';
+  document.getElementById('pasoExito').style.display    = 'none';
+  document.getElementById('modalError').textContent     = '';
+  document.getElementById('btnRegModal').textContent    = 'Crear mi cuenta →';
+  document.getElementById('btnRegModal').disabled       = false;
+  if (plan) {
+    const sel = document.getElementById('mPlan');
+    const opt = Array.from(sel.options).find(o => o.value === plan);
+    if (opt) sel.value = plan;
+  }
+  document.getElementById('modalRegistro').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModal() {
+  document.getElementById('modalRegistro').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function previewModalFoto(input) {
+  if (input.files && input.files[0]) {
+    const r = new FileReader();
+    r.onload = e => {
+      const p = document.getElementById('mFotoPreview');
+      p.src = e.target.result;
+      p.style.display = 'block';
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+
+async function registrarAfiliado() {
+  const nombre  = document.getElementById('mNombre').value.trim();
+  const apellido= document.getElementById('mApellido').value.trim();
+  const email   = document.getElementById('mEmail').value.trim();
+  const tel     = document.getElementById('mTel').value.trim();
+  const pass    = document.getElementById('mPass').value;
+  const mascota = document.getElementById('mMascota').value.trim();
+  const raza    = document.getElementById('mRaza').value.trim();
+  const plan    = document.getElementById('mPlan').value;
+  const fotoEl  = document.getElementById('mFoto');
+  const errEl   = document.getElementById('modalError');
+  const btn     = document.getElementById('btnRegModal');
+
+  errEl.textContent = '';
+  if (!nombre || !email || !pass || !mascota) { errEl.textContent = 'Completá los campos obligatorios (*).'; return; }
+  if (pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+
+  btn.textContent = 'Creando cuenta...'; btn.disabled = true;
+
+  try {
+    const cred = await _auth.createUserWithEmailAndPassword(email, pass);
+    const uid  = cred.user.uid;
+
+    let fotoURL = '';
+    if (fotoEl.files && fotoEl.files[0]) {
+      try {
+        const sref = _st.ref('mascotas/' + uid + '/foto.jpg');
+        await sref.put(fotoEl.files[0]);
+        fotoURL = await sref.getDownloadURL();
+      } catch(fe) { console.warn('Foto no subida:', fe.message); }
+    }
+
+    await _db.collection('usuarios').doc(uid).set({
+      uid, nombre, apellido, email, telefono: tel,
+      rol: 'afiliado', estado: 'pendiente',
+      plan: plan || 'Sin definir',
+      mascota: { nombre: mascota, raza, foto: fotoURL },
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    await _auth.signOut(); // No loguear desde la landing
+    document.getElementById('pasoRegistro').style.display = 'none';
+    document.getElementById('pasoExito').style.display    = 'block';
+
+  } catch(e) {
+    btn.textContent = 'Crear mi cuenta →'; btn.disabled = false;
+    if (e.code === 'auth/email-already-in-use') errEl.textContent = 'Ese email ya está registrado.';
+    else if (e.code === 'auth/weak-password')   errEl.textContent = 'Contraseña muy débil (mín. 6 caracteres).';
+    else errEl.textContent = 'Error: ' + e.message;
+  }
+}
+</script>
 
 <!-- FOOTER -->
 <footer>
@@ -860,7 +1028,7 @@
       <a href="#como">Cómo funciona</a>
       <a href="#porque">Por qué MEDIPet</a>
       <a href="https://laopinionline.github.io/medipet-app/">Zona de afiliados</a>
-      <a href="https://laopinionline.github.io/medipet-app/?registro=1">Afiliarme</a>
+      <a href="#" onclick="abrirModal();return false;">Afiliarme</a>
     </div>
   </div>
   <div class="footer-copy">
