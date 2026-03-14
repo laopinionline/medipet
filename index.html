@@ -989,10 +989,27 @@ async function registrarAfiliado() {
     let fotoURL = '';
     if (fotoEl.files && fotoEl.files[0]) {
       try {
-        const sref = _st.ref('mascotas/' + uid + '/foto.jpg');
-        await sref.put(fotoEl.files[0]);
-        fotoURL = await sref.getDownloadURL();
-      } catch(fe) { console.warn('Foto no subida:', fe.message); }
+        // Comprimir y guardar como base64 en Firestore (sin Storage)
+        fotoURL = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            // Comprimir la imagen antes de guardar
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              const MAX = 300;
+              let w = img.width, h = img.height;
+              if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
+              else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
+              canvas.width = w; canvas.height = h;
+              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+              resolve(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(fotoEl.files[0]);
+        });
+      } catch(fe) { console.warn('Foto no procesada:', fe.message); fotoURL = ''; }
     }
 
     await _db.collection('usuarios').doc(uid).set({
