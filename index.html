@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDIPet — Tu mascota, siempre cuidada.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --azul-principal: #1A5FB4;
+    --azul-medio: #2272D9;
+    --azul-claro: #5BA3E8;
+    --azul-pale: #EBF3FC;
+    --noche: #0D1B3E;
+    --fondo: #F5F7FA;
+    --blanco: #ffffff;
+    --texto: #1a2340;
+    --texto-suave: #5a6a8a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 5%;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,95,180,0.08);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 24px rgba(13,27,62,0.10); }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo .iso {
+    width: 38px; height: 38px;
+    flex-shrink: 0;
+  }
+  .nav-logo .marca {
+    font-weight: 800; font-size: 1.25rem; line-height: 1;
+    color: var(--azul-principal);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo .marca span { color: var(--azul-claro); font-weight: 700; }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--texto-suave);
+    font-weight: 600; font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--azul-principal); }
+
+  .nav-cta {
+    background: var(--azul-principal); color: white !important;
+    padding: 10px 22px; border-radius: 100px;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--noche) !important; transform: translateY(-1px); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--azul-principal); border-radius: 2px; transition: 0.3s; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(145deg, var(--noche) 0%, #1A3A7A 55%, var(--azul-principal) 100%);
+    display: flex; align-items: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(91,163,232,0.18) 0%, transparent 70%);
+  }
+
+  /* Patas decorativas */
+  .hero-patas {
+    position: absolute;
+    font-size: 120px;
+    opacity: 0.04;
+    user-select: none;
+  }
+  .hero-patas.p1 { top: 10%; right: 5%; transform: rotate(-20deg); }
+  .hero-patas.p2 { bottom: 15%; left: 3%; transform: rotate(15deg); font-size: 80px; }
+
+  .hero-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+    position: relative; z-index: 1;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1;
+    color: white; margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  .hero-text h1 em {
+    font-style: normal;
+    color: var(--azul-claro);
+  }
+  .hero-text p {
+    font-size: 1.15rem; color: rgba(255,255,255,0.72);
+    font-weight: 400; line-height: 1.7;
+    margin-bottom: 36px; max-width: 480px;
+  }
+
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: white; color: var(--azul-principal);
+    padding: 14px 30px; border-radius: 100px;
+    font-weight: 800; font-size: 1rem;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+
+  .btn-outline {
+    border: 2px solid rgba(255,255,255,0.4); color: white;
+    padding: 14px 30px; border-radius: 100px;
+    font-weight: 700; font-size: 1rem;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+  /* Tarjeta carnet hero */
+  .hero-card {
+    background: linear-gradient(135deg, var(--azul-medio), var(--azul-principal));
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .card-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; opacity: 0.65; margin-bottom: 6px;
+  }
+  .card-plan {
+    font-size: 1rem; font-weight: 800; margin-bottom: 20px;
+    color: var(--azul-pale);
+  }
+  .card-mascota {
+    font-size: 2rem; font-weight: 900; margin-bottom: 4px;
+  }
+  .card-raza {
+    font-size: 0.8rem; opacity: 0.7; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 20px;
+  }
+  .card-titular {
+    font-size: 0.75rem; opacity: 0.65; font-weight: 600; margin-bottom: 2px;
+  }
+  .card-nombre {
+    font-size: 0.95rem; font-weight: 700; margin-bottom: 16px;
+  }
+  .card-num {
+    font-size: 0.75rem; opacity: 0.5; font-family: monospace; letter-spacing: 2px;
+  }
+  .card-iso {
+    position: absolute; top: 28px; right: 28px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px; padding: 6px 14px;
+    font-size: 0.78rem; font-weight: 700;
+    margin-top: 12px;
+  }
+  .chip-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; }
+
+  /* ── STATS ── */
+  .stats {
+    background: white;
+    padding: 60px 5%;
+    border-bottom: 1px solid rgba(26,95,180,0.08);
+  }
+  .stats-inner {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .stat {
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 16px;
+    transition: background 0.2s;
+  }
+  .stat:hover { background: var(--azul-pale); }
+  .stat-num {
+    font-size: 2.4rem; font-weight: 900;
+    color: var(--azul-principal); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.85rem; color: var(--texto-suave);
+    font-weight: 600; line-height: 1.4;
+  }
+
+  /* ── SECCIÓN GENÉRICA ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    display: inline-block;
+    background: var(--azul-pale); color: var(--azul-principal);
+    font-size: 0.75rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 900; line-height: 1.15;
+    letter-spacing: -0.5px; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--texto-suave);
+    max-width: 560px; line-height: 1.7; margin-bottom: 56px;
+  }
+
+  /* ── PLANES ── */
+  .planes { background: var(--fondo); }
+  .planes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .plan-card {
+    background: white;
+    border-radius: 24px;
+    padding: 36px 28px;
+    border: 2px solid transparent;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .plan-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--azul-claro);
+    box-shadow: 0 20px 60px rgba(26,95,180,0.12);
+  }
+  .plan-card.destacado {
+    background: linear-gradient(145deg, var(--azul-principal), var(--noche));
+    color: white;
+    transform: scale(1.03);
+    box-shadow: 0 24px 64px rgba(26,95,180,0.35);
+  }
+  .plan-card.destacado:hover { transform: scale(1.03) translateY(-6px); }
+
+  .plan-badge {
+    position: absolute; top: 20px; right: 20px;
+    background: #fbbf24; color: #1a1a1a;
+    font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+  }
+  .plan-emoji { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+  .plan-nombre {
+    font-size: 1.3rem; font-weight: 900; margin-bottom: 6px;
+  }
+  .plan-desc {
+    font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;
+    opacity: 0.7;
+  }
+  .plan-precio {
+    font-size: 2.2rem; font-weight: 900; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .plan-precio span { font-size: 1rem; font-weight: 600; opacity: 0.7; }
+  .plan-mes { font-size: 0.8rem; opacity: 0.6; margin-bottom: 28px; }
+
+  .plan-features { list-style: none; margin-bottom: 32px; }
+  .plan-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.875rem; padding: 7px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-weight: 600;
+  }
+  .plan-card.destacado .plan-features li { border-color: rgba(255,255,255,0.1); }
+  .plan-features li:last-child { border: none; }
+  .check { color: #22c55e; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .plan-card.destacado .check { color: #86efac; }
+
+  .btn-plan {
+    display: block; text-align: center;
+    padding: 14px; border-radius: 14px;
+    font-weight: 800; font-size: 0.95rem;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-plan-light {
+    background: var(--azul-pale); color: var(--azul-principal);
+  }
+  .btn-plan-light:hover { background: var(--azul-principal); color: white; }
+  .btn-plan-dark {
+    background: white; color: var(--azul-principal);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .btn-plan-dark:hover { background: var(--azul-pale); }
+
+  /* ── CÓMO FUNCIONA ── */
+  .como { background: white; }
+  .como-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: 20px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--azul-pale);
+    position: relative;
+  }
+  .step:last-child { border: none; }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--azul-pale); color: var(--azul-principal);
+    font-weight: 900; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .step:hover .step-num {
+    background: var(--azul-principal); color: white;
+  }
+  .step-content h3 { font-weight: 800; font-size: 1.05rem; margin-bottom: 6px; }
+  .step-content p { font-size: 0.875rem; color: var(--texto-suave); line-height: 1.6; }
+
+  .como-visual {
+    background: linear-gradient(145deg, var(--azul-pale), white);
+    border-radius: 28px;
+    padding: 40px;
+    text-align: center;
+    border: 1px solid rgba(26,95,180,0.1);
+  }
+  .como-visual .big-emoji { font-size: 80px; margin-bottom: 20px; display: block; }
+  .como-visual h3 { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; color: var(--azul-principal); }
+  .como-visual p { font-size: 0.9rem; color: var(--texto-suave); line-height: 1.7; }
+
+  .network-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-top: 24px;
+  }
+  .vet-chip {
+    background: white; border: 1px solid rgba(26,95,180,0.15);
+    border-radius: 12px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--texto);
+  }
+  .vet-chip .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── POR QUÉ MEDIPET ── */
+  .porque { background: var(--fondo); }
+  .porque-inner { max-width: 1100px; margin: 0 auto; }
+  .porque-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .porque-card {
+    background: white; border-radius: 20px; padding: 32px 24px;
+    border: 1px solid rgba(26,95,180,0.08);
+    transition: all 0.25s;
+  }
+  .porque-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(26,95,180,0.10);
+    border-color: var(--azul-claro);
+  }
+  .porque-icon {
+    font-size: 2.2rem; margin-bottom: 16px; display: block;
+  }
+  .porque-card h3 { font-weight: 800; font-size: 1.05rem; margin-bottom: 10px; }
+  .porque-card p { font-size: 0.875rem; color: var(--texto-suave); line-height: 1.7; }
+
+  /* ── FAMILIA ── */
+  .familia {
+    background: var(--noche);
+    padding: 80px 5%;
+    text-align: center;
+  }
+  .familia h2 { color: white; }
+  .familia p { color: rgba(255,255,255,0.6); max-width: 560px; margin: 0 auto 48px; font-size: 1rem; }
+  .familia-logos {
+    display: flex; align-items: center; justify-content: center; gap: 60px;
+    flex-wrap: wrap;
+  }
+  .familia-logo {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0.7; transition: opacity 0.2s;
+  }
+  .familia-logo:hover { opacity: 1; }
+  .familia-logo .tag {
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); font-weight: 700;
+  }
+  .familia-logo .nombre {
+    font-size: 1.4rem; font-weight: 900; color: white;
+  }
+  .familia-logo .nombre.medicar { color: #ff4444; }
+  .familia-sep {
+    width: 1px; height: 60px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* ── CTA FINAL ── */
+  .cta-final {
+    background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-principal) 100%);
+    padding: 100px 5%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-final::before { display: none; }
+  .cta-final h2 { color: white; max-width: 640px; margin: 0 auto 16px; }
+  .cta-final p { color: rgba(255,255,255,0.75); font-size: 1.05rem; margin-bottom: 40px; }
+  .cta-final .btn-primary { font-size: 1.05rem; padding: 16px 36px; }
+
+  /* ── FORMULARIO MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(13,27,62,0.7);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: white; border-radius: 28px;
+    padding: 48px 40px;
+    max-width: 480px; width: 100%;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+    transform: translateY(20px); transition: transform 0.3s;
+    position: relative;
+  }
+  .modal-overlay.active .modal { transform: translateY(0); }
+
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    background: var(--fondo); border: none; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--texto-suave); transition: background 0.2s;
+  }
+  .modal-close:hover { background: var(--azul-pale); }
+
+  .modal h3 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; color: var(--noche); }
+  .modal p { font-size: 0.875rem; color: var(--texto-suave); margin-bottom: 28px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: var(--texto); }
+  .form-group input, .form-group select {
+    width: 100%; padding: 13px 16px;
+    border: 2px solid rgba(26,95,180,0.15);
+    border-radius: 12px; font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem; font-weight: 600; color: var(--texto);
+    background: var(--fondo); transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--azul-medio); background: white; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .btn-form {
+    width: 100%; padding: 15px;
+    background: var(--azul-principal); color: white;
+    border: none; border-radius: 14px;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-form:hover { background: var(--noche); }
+
+  .form-nota {
+    text-align: center; font-size: 0.75rem; color: var(--texto-suave);
+    margin-top: 12px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--noche);
+    padding: 48px 5% 32px;
+    color: rgba(255,255,255,0.5);
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  footer .nav-logo .marca { color: white; }
+  footer .nav-logo .marca span { color: var(--azul-claro); }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.8rem; font-weight: 600; transition: color 0.2s; }
+  .footer-links a:hover { color: white; }
+  .footer-copy { font-size: 0.75rem; margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-card { max-width: 360px; margin: 0 auto; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .planes-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .plan-card.destacado { transform: none; }
+    .como-inner { grid-template-columns: 1fr; }
+    .porque-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  @media (max-width: 600px) {
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .modal { padding: 36px 24px; }
+    .hero { padding: 100px 5% 60px; }
+    section { padding: 70px 5%; }
+  }
+
+  /* ── ANIMACIONES ENTRADA ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<!-- ISOTIPO SVG INLINE -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden">
+  <defs>
+    <symbol id="mp-iso" viewBox="0 0 80 80">
+      <!-- Fondo cuadrado redondeado azul medio -->
+      <rect width="80" height="80" rx="18" fill="#2272D9"/>
+      <!-- Orejas (detrás del cuerpo) -->
+      <circle cx="24" cy="28" r="10" fill="#5BA3E8"/>
+      <circle cx="56" cy="28" r="10" fill="#5BA3E8"/>
+      <!-- Cuerpo blob principal -->
+      <circle cx="40" cy="44" r="22" fill="#5BA3E8"/>
+      <!-- Mejillas interiores más claras -->
+      <circle cx="30" cy="50" r="7" fill="#7BBFEE" opacity="0.5"/>
+      <circle cx="50" cy="50" r="7" fill="#7BBFEE" opacity="0.5"/>
+      <!-- Ojos -->
+      <circle cx="33" cy="42" r="4" fill="white"/>
+      <circle cx="47" cy="42" r="4" fill="white"/>
+      <circle cx="34" cy="43" r="2" fill="#1A5FB4"/>
+      <circle cx="48" cy="43" r="2" fill="#1A5FB4"/>
+      <!-- Nariz pequeña -->
+      <ellipse cx="40" cy="50" rx="2.5" ry="1.8" fill="#1A5FB4" opacity="0.5"/>
+      <!-- Plus/cruz arriba derecha -->
+      <line x1="57" y1="11" x2="57" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="53" y1="15" x2="61" y2="15" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="mp-iso-white" viewBox="0 0 80 80">
+      <!-- Fondo semi-transparente -->
+      <rect width="80" height="80" rx="18" fill="rgba(255,255,255,0.15)"/>
+      <!-- Orejas -->
+      <circle cx="24" cy="28" r="10" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="56" cy="28" r="10" fill="rgba(255,255,255,0.7)"/>
+      <!-- Cuerpo blob -->
+      <circle cx="40" cy="44" r="22" fill="white"/>
+      <!-- Ojos -->
+      <circle cx="33" cy="42" r="4" fill="white"/>
+      <circle cx="47" cy="42" r="4" fill="white"/>
+      <circle cx="34" cy="43" r="2" fill="#2272D9"/>
+      <circle cx="48" cy="43" r="2" fill="#2272D9"/>
+      <!-- Nariz -->
+      <ellipse cx="40" cy="50" rx="2.5" ry="1.8" fill="#2272D9" opacity="0.4"/>
+      <!-- Plus -->
+      <line x1="57" y1="11" x2="57" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="53" y1="15" x2="61" y2="15" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg class="iso-svg" width="38" height="38"><use href="#mp-iso"/></svg>
+    <div class="marca">MEDI<span>Pet</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#planes">Planes</a></li>
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#porque">Por qué MEDIPet</a></li>
+    <li><a href="#" class="nav-cta" onclick="openModal()">Quiero afiliarme</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-patas p1"><svg width="120" height="120" opacity="0.06"><use href="#mp-iso-white"/></svg></div>
+  <div class="hero-patas p2"><svg width="80" height="80" opacity="0.06"><use href="#mp-iso-white"/></svg></div>
+  <div class="hero-inner">
+    <div class="hero-text fade-up">
+      <span class="section-label">Pergamino y región</span>
+      <h1>Tu mascota,<br><em>siempre cuidada.</em></h1>
+      <p>El primer plan de salud para mascotas con presencia real en Pergamino. Veterinarios locales, sin llamados a Buenos Aires, sin adelantar plata.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary" onclick="openModal()">Quiero mi plan</a>
+        <a href="#planes" class="btn-outline">Ver coberturas</a>
+      </div>
+    </div>
+    <div class="fade-up" style="transition-delay: 0.15s;">
+      <div class="hero-card">
+        <svg class="card-iso" style="background:none;" width="44" height="44"><use href="#mp-iso-white"/></svg>
+        <div class="card-label">Plan</div>
+        <div class="card-plan">Completo</div>
+        <div class="card-mascota">Simba</div>
+        <div class="card-raza">Golden Retriever</div>
+        <div class="card-titular">Titular</div>
+        <div class="card-nombre">María Ramírez</div>
+        <div class="card-num">MP · 0042 · 2026</div>
+        <div class="card-chip">
+          <span class="chip-dot"></span>
+          Cobertura activa
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat fade-up">
+      <div class="stat-num">80%</div>
+      <div class="stat-label">de hogares argentinos tiene al menos una mascota</div>
+    </div>
+    <div class="stat fade-up" style="transition-delay:0.1s">
+      <div class="stat-num">$70k</div>
+      <div class="stat-label">gasto mensual promedio en salud de un perro o gato en 2026</div>
+    </div>
+    <div class="stat fade-up" style="transition-delay:0.2s">
+      <div class="stat-num">94%</div>
+      <div class="stat-label">de argentinos dispuestos a gastar para que su mascota esté sana</div>
+    </div>
+    <div class="stat fade-up" style="transition-delay:0.3s">
+      <div class="stat-num">0</div>
+      <div class="stat-label">operadores locales presentes en ciudades intermedias como Pergamino</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANES -->
+<section class="planes" id="planes">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="fade-up">
+      <span class="section-label">Coberturas</span>
+      <h2>Elegí el plan para tu compañero</h2>
+      <p class="section-sub">Sin trámites complicados. Presentás tu carnet en la veterinaria y listo. Sin adelantar plata, sin reintegros.</p>
+    </div>
+    <div class="planes-grid">
+      <!-- BÁSICO -->
+      <div class="plan-card fade-up">
+        <span class="plan-emoji">🐱</span>
+        <div class="plan-nombre">Básico</div>
+        <div class="plan-desc">Para quienes quieren tranquilidad sin comprometer el presupuesto.</div>
+        <div class="plan-precio">$16.000 <span>/mes</span></div>
+        <div class="plan-mes">por mascota</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Consultas veterinarias</li>
+          <li><span class="check">✓</span> Vacunas del plan anual</li>
+          <li><span class="check">✓</span> Urgencias básicas</li>
+          <li><span class="check">✓</span> Atención presencial en Pergamino</li>
+          <li><span class="check">✓</span> Carnet MEDIPet digital</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-light" onclick="openModal()">Empezar con Básico</a>
+      </div>
+
+      <!-- COMPLETO (destacado) -->
+      <div class="plan-card destacado fade-up" style="transition-delay:0.1s">
+        <div class="plan-badge">⭐ MÁS ELEGIDO</div>
+        <span class="plan-emoji">🐶</span>
+        <div class="plan-nombre">Completo</div>
+        <div class="plan-desc">Cobertura amplia para quienes tratan a su mascota como un miembro más de la familia.</div>
+        <div class="plan-precio">$45.000 <span>/mes</span></div>
+        <div class="plan-mes">por mascota</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Todo el plan Básico</li>
+          <li><span class="check">✓</span> Limpieza dental anual</li>
+          <li><span class="check">✓</span> Estudios clínicos y análisis</li>
+          <li><span class="check">✓</span> Cirugías programadas</li>
+          <li><span class="check">✓</span> Castración incluida</li>
+          <li><span class="check">✓</span> Atención de urgencias 24h</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-dark" onclick="openModal()">Quiero el plan Completo</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="plan-card fade-up" style="transition-delay:0.2s">
+        <span class="plan-emoji">🌟</span>
+        <div class="plan-nombre">Premium</div>
+        <div class="plan-desc">Para mascotas que merecen lo mejor. Cobertura máxima sin límites.</div>
+        <div class="plan-precio">$90.000 <span>/mes</span></div>
+        <div class="plan-mes">por mascota</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Todo el plan Completo</li>
+          <li><span class="check">✓</span> Fisioterapia y rehabilitación</li>
+          <li><span class="check">✓</span> Oncología</li>
+          <li><span class="check">✓</span> Estudios de alta complejidad</li>
+          <li><span class="check">✓</span> Cobertura hasta $3.000.000</li>
+          <li><span class="check">✓</span> Cremación incluida</li>
+        </ul>
+        <a href="#" class="btn-plan btn-plan-light" onclick="openModal()">Quiero el Premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="como" id="como">
+  <div class="como-inner">
+    <div class="fade-up">
+      <span class="section-label">Simple de usar</span>
+      <h2>¿Cómo funciona MEDIPet?</h2>
+      <p class="section-sub">Sin burocracia. Sin 0800 de Buenos Aires. Sin esperar el reintegro a fin de mes.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Elegís tu plan online</h3>
+            <p>Completás el formulario en menos de 3 minutos. Elegís el plan que mejor se adapta a tu mascota y tu presupuesto.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Recibís tu carnet digital</h3>
+            <p>En 24 horas hábiles recibís el carnet MEDIPet con los datos de tu mascota y tu número de afiliado.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Vas a tu veterinaria de confianza</h3>
+            <p>Presentás el carnet en cualquiera de las clínicas adheridas a MEDIPet en Pergamino. Sin adelantar plata.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>MEDIPet paga directamente</h3>
+            <p>La cobertura aplica en el momento. Vos te vas con tu mascota atendida, nosotros nos encargamos del resto.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="como-visual fade-up" style="transition-delay:0.15s">
+      <span class="big-emoji">📍</span>
+      <h3>Tu veterinario de confianza, coordinado</h3>
+      <p>MEDIPet articula una red de clínicas seleccionadas en Pergamino y la región. Cuando te afiliás, te informamos los prestadores disponibles más cercanos a vos.</p>
+      <p style="margin-top:20px; font-size:0.85rem; color:var(--azul-principal); font-weight:700;">¿Querés saber si tu veterinario ya es prestador? Consultanos →</p>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ MEDIPET -->
+<section class="porque" id="porque">
+  <div class="porque-inner">
+    <div class="fade-up">
+      <span class="section-label">Nuestra diferencia</span>
+      <h2>Lo que ningún operador nacional puede darte en Pergamino</h2>
+      <p class="section-sub">Todos los planes de salud para mascotas atienden desde Buenos Aires. MEDIPet es la única opción local.</p>
+    </div>
+    <div class="porque-grid">
+      <div class="porque-card fade-up">
+        <span class="porque-icon">📍</span>
+        <h3>Presencia local real</h3>
+        <p>Oficina en Pergamino. Un equipo que conoce la ciudad, los veterinarios y a vos. No un 0800 centralizado a 300 km.</p>
+      </div>
+      <div class="porque-card fade-up" style="transition-delay:0.1s">
+        <span class="porque-icon">💳</span>
+        <h3>Sin adelantar plata</h3>
+        <p>A diferencia de los sistemas de reintegro, MEDIPet opera con red propia: presentás el plan y tu mascota recibe atención.</p>
+      </div>
+      <div class="porque-card fade-up" style="transition-delay:0.2s">
+        <span class="porque-icon">🤝</span>
+        <h3>Red veterinaria coordinada</h3>
+        <p>No cualquier veterinario: clínicas seleccionadas con criterios de calidad, en convenio real, que ya conocen el sistema MEDIPet.</p>
+      </div>
+      <div class="porque-card fade-up" style="transition-delay:0.3s">
+        <span class="porque-icon">💰</span>
+        <h3>Precio accesible</h3>
+        <p>Planes desde $16.000/mes con cobertura real. Sin los costos de una estructura nacional que vos terminás pagando.</p>
+      </div>
+      <div class="porque-card fade-up" style="transition-delay:0.4s">
+        <span class="porque-icon">⚡</span>
+        <h3>Alta en 24 horas</h3>
+        <p>Sin turnos, sin espera. Completás el formulario online y en un día hábil tenés tu carnet activo.</p>
+      </div>
+      <div class="porque-card fade-up" style="transition-delay:0.5s">
+        <span class="porque-icon">🐾</span>
+        <h3>Familia Medicar</h3>
+        <p>MEDIPet nace del mismo grupo que Medicar, con 40 años de trayectoria en salud y emergencias en la región.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- CTA FINAL -->
+<div class="cta-final">
+  <h2 class="fade-up">¿Tu mascota ya tiene su plan?</h2>
+  <p class="fade-up">Afiliarte tarda 3 minutos. El carnet llega en 24 horas. La tranquilidad, para siempre.</p>
+  <a href="#" class="btn-primary fade-up" onclick="openModal()">Quiero afiliarme ahora</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="nav-logo">
+      <svg class="iso-svg" width="38" height="38"><use href="#mp-iso-white"/></svg>
+      <div class="marca">MEDI<span>Pet</span></div>
+    </a>
+    <div class="footer-links">
+      <a href="#planes">Planes</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#porque">Por qué MEDIPet</a>
+      <a href="#" onclick="openModal()">Afiliarme</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    © 2026 MEDIPet · Pergamino, Buenos Aires · Todos los derechos reservados
+  </div>
+</footer>
+
+<!-- MODAL FORMULARIO -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>¡Empezá hoy! 🐾</h3>
+    <p>Completá tus datos y nos contactamos en menos de 24 horas hábiles.</p>
+
+    <div id="formContent">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tu nombre</label>
+          <input type="text" placeholder="Lucas">
+        </div>
+        <div class="form-group">
+          <label>Apellido</label>
+          <input type="text" placeholder="Marino">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp / Teléfono</label>
+        <input type="tel" placeholder="(02477) 000-000">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="hola@ejemplo.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre de tu mascota</label>
+          <input type="text" placeholder="Simba">
+        </div>
+        <div class="form-group">
+          <label>Plan que te interesa</label>
+          <select>
+            <option value="">Elegir...</option>
+            <option>Básico — $16.000/mes</option>
+            <option>Completo — $45.000/mes</option>
+            <option>Premium — $90.000/mes</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-form" onclick="submitForm()">Quiero mi plan MEDIPet →</button>
+      <p class="form-nota">✓ Sin compromiso · Te llamamos nosotros · Alta en 24hs</p>
+    </div>
+
+    <div id="formSuccess" style="display:none; text-align:center; padding: 20px 0;">
+      <div style="font-size:3rem; margin-bottom:16px;">🎉</div>
+      <h3 style="margin-bottom:10px;">¡Listo, Lucas!</h3>
+      <p style="color:var(--texto-suave);">Recibimos tu solicitud. Nos contactamos en menos de 24 horas hábiles para activar el plan de tu mascota.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll nav shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Intersection Observer para animaciones
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Modal
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    return false;
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+  function submitForm() {
+    document.getElementById('formContent').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Hamburger (mobile menu simple)
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '70px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'white';
+    links.style.padding = '20px 5%';
+    links.style.borderBottom = '1px solid rgba(26,95,180,0.1)';
+    links.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
+  }
+
+  // Smooth scroll para links de nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
