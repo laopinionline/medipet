@@ -876,7 +876,7 @@
           </div>
           <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Fecha de nacimiento de la mascota</label><input type="date" id="mFechaMascota" class="modal-input"></div>
         </div>
-        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Plan</label>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Plan de la mascota</label>
           <select id="mPlan" class="modal-input">
             <option value="">Elegir plan...</option>
             <option value="Básico">Básico — $16.000/mes</option>
@@ -1022,7 +1022,7 @@ async function registrarAfiliado() {
       uid, nombre, apellido, email, telefono: tel, fechaNacimiento: fechaNac,
       rol: 'afiliado', estado: 'pendiente',
       plan: plan || 'Sin definir',
-      mascota: { nombre: mascota, raza, fechaNacimiento: fechaMascota, foto: fotoURL },
+      mascotas: [{ nombre: mascota, raza, fechaNacimiento: fechaMascota, plan: plan||'Sin definir', foto: fotoURL }],
       creadoEn: firebase.firestore.FieldValue.serverTimestamp()
     });
 
