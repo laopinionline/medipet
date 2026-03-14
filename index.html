@@ -619,7 +619,7 @@
     <li><a href="#como">Cómo funciona</a></li>
     <li><a href="#porque">Por qué MEDIPet</a></li>
     <li><a href="https://laopinionline.github.io/medipet-app/" target="_blank" class="nav-cta" style="background:transparent;border:2px solid var(--azul-principal);color:var(--azul-principal) !important;margin-right:6px;">Zona de afiliados</a></li>
-    <li><a href="#" class="nav-cta" onclick="openModal()">Quiero afiliarme</a></li>
+    <li><a href="#" class="nav-cta" href="https://laopinionline.github.io/medipet-app/" target="_blank" href="https://laopinionline.github.io/medipet-app/?registro=1" target="_blank">Quiero afiliarme</a></li>
   </ul>
   <div class="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -636,7 +636,7 @@
       <h1>Tu mascota,<br><em>siempre cuidada.</em></h1>
       <p>El primer plan de salud para mascotas en Pergamino.</p>
       <div class="hero-btns">
-        <a href="#" class="btn-primary" onclick="openModal()">Quiero mi plan</a>
+        <a href="#" class="btn-primary" href="https://laopinionline.github.io/medipet-app/" target="_blank" href="https://laopinionline.github.io/medipet-app/?registro=1" target="_blank">Quiero mi plan</a>
         <a href="#planes" class="btn-outline">Ver coberturas</a>
         <a href="https://laopinionline.github.io/medipet-app/" target="_blank" class="btn-outline" style="opacity:0.7;">Zona de afiliados →</a>
       </div>
@@ -705,7 +705,7 @@
           <li><span class="check">✓</span> Atención presencial en Pergamino</li>
           <li><span class="check">✓</span> Carnet MEDIPet digital</li>
         </ul>
-        <a href="#" class="btn-plan btn-plan-light" onclick="openModal()">Empezar con Básico</a>
+        <a href="#" class="btn-plan btn-plan-light" href="https://laopinionline.github.io/medipet-app/" target="_blank" onclick="">Empezar con Básico</a>
       </div>
 
       <!-- COMPLETO (destacado) -->
@@ -724,7 +724,7 @@
           <li><span class="check">✓</span> Castración incluida</li>
           <li><span class="check">✓</span> Atención de urgencias 24h</li>
         </ul>
-        <a href="#" class="btn-plan btn-plan-dark" onclick="openModal()">Quiero el plan Completo</a>
+        <a href="#" class="btn-plan btn-plan-dark" href="https://laopinionline.github.io/medipet-app/" target="_blank" onclick="">Quiero el plan Completo</a>
       </div>
 
       <!-- PREMIUM -->
@@ -742,7 +742,7 @@
           <li><span class="check">✓</span> Cobertura hasta $3.000.000</li>
           <li><span class="check">✓</span> Cremación incluida</li>
         </ul>
-        <a href="#" class="btn-plan btn-plan-light" onclick="openModal()">Quiero el Premium</a>
+        <a href="#" class="btn-plan btn-plan-light" href="https://laopinionline.github.io/medipet-app/" target="_blank" onclick="">Quiero el Premium</a>
       </div>
     </div>
   </div>
@@ -845,7 +845,7 @@
 <div class="cta-final">
   <h2 class="fade-up">¿Tu mascota ya tiene su plan?</h2>
   <p class="fade-up">Afiliarte tarda 3 minutos. El carnet llega en 24 horas. La tranquilidad, para siempre.</p>
-  <a href="#" class="btn-primary fade-up" onclick="openModal()">Quiero afiliarme ahora</a>
+  <a href="#" class="btn-primary fade-up" href="https://laopinionline.github.io/medipet-app/" target="_blank" href="https://laopinionline.github.io/medipet-app/?registro=1" target="_blank">Quiero afiliarme ahora</a>
 </div>
 
 <!-- FOOTER -->
@@ -860,66 +860,13 @@
       <a href="#como">Cómo funciona</a>
       <a href="#porque">Por qué MEDIPet</a>
       <a href="https://laopinionline.github.io/medipet-app/" target="_blank">Zona de afiliados</a>
-      <a href="#" onclick="openModal()">Afiliarme</a>
+      <a href="#" href="https://laopinionline.github.io/medipet-app/" target="_blank" href="https://laopinionline.github.io/medipet-app/?registro=1" target="_blank">Afiliarme</a>
     </div>
   </div>
   <div class="footer-copy">
     © 2026 MEDIPet · Pergamino, Buenos Aires · Todos los derechos reservados
   </div>
 </footer>
-
-<!-- MODAL FORMULARIO -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>¡Empezá hoy! 🐾</h3>
-    <p>Completá tus datos y nos contactamos en menos de 24 horas hábiles.</p>
-
-    <div id="formContent">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Tu nombre</label>
-          <input type="text" placeholder="Juan">
-        </div>
-        <div class="form-group">
-          <label>Apellido</label>
-          <input type="text" placeholder="Pérez">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>WhatsApp / Teléfono</label>
-        <input type="tel" placeholder="(02477) 000-000">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="hola@ejemplo.com">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nombre de tu mascota</label>
-          <input type="text" placeholder="Simba">
-        </div>
-        <div class="form-group">
-          <label>Plan que te interesa</label>
-          <select>
-            <option value="">Elegir...</option>
-            <option>Básico — $16.000/mes</option>
-            <option>Completo — $45.000/mes</option>
-            <option>Premium — $90.000/mes</option>
-          </select>
-        </div>
-      </div>
-      <button class="btn-form" onclick="submitForm()">Quiero mi plan MEDIPet →</button>
-      <p class="form-nota">✓ Sin compromiso · Te llamamos nosotros · Alta en 24hs</p>
-    </div>
-
-    <div id="formSuccess" style="display:none; text-align:center; padding: 20px 0;">
-      <div style="font-size:3rem; margin-bottom:16px;">🎉</div>
-      <h3 style="margin-bottom:10px;">¡Listo, Lucas!</h3>
-      <p style="color:var(--texto-suave);">Recibimos tu solicitud. Nos contactamos en menos de 24 horas hábiles para activar el plan de tu mascota.</p>
-    </div>
-  </div>
-</div>
 
 <script>
   // Scroll nav shadow
@@ -940,22 +887,7 @@
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
   // Modal
-  function openModal() {
-    document.getElementById('modalOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    return false;
-  }
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
-  function submitForm() {
-    document.getElementById('formContent').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-  }
+
 
   // Hamburger (mobile menu simple)
   function toggleMenu() {
