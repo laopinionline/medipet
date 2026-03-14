@@ -864,6 +864,7 @@
         </div>
         <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Email *</label><input type="email" id="mEmail" placeholder="juan@ejemplo.com" class="modal-input"></div>
         <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">WhatsApp / Teléfono</label><input type="tel" id="mTel" placeholder="(02477) 000-000" class="modal-input"></div>
+        <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Fecha de nacimiento *</label><input type="date" id="mFechaNac" class="modal-input"></div>
         <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Contraseña * <span style="font-weight:400;color:#9ca3af;">(mín. 6 caracteres)</span></label><input type="password" id="mPass" placeholder="••••••••" class="modal-input"></div>
         <div style="border-top:1px solid #EBF3FC;padding-top:12px;">
           <p style="font-size:0.72rem;font-weight:800;color:#0D1B3E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">Tu mascota</p>
@@ -965,6 +966,7 @@ function previewModalFoto(input) {
 
 async function registrarAfiliado() {
   const nombre  = document.getElementById('mNombre').value.trim();
+  const fechaNac = document.getElementById('mFechaNac').value;
   const apellido= document.getElementById('mApellido').value.trim();
   const email   = document.getElementById('mEmail').value.trim();
   const tel     = document.getElementById('mTel').value.trim();
@@ -977,7 +979,7 @@ async function registrarAfiliado() {
   const btn     = document.getElementById('btnRegModal');
 
   errEl.textContent = '';
-  if (!nombre || !email || !pass || !mascota) { errEl.textContent = 'Completá los campos obligatorios (*).'; return; }
+  if (!nombre || !email || !pass || !mascota || !fechaNac) { errEl.textContent = 'Completá los campos obligatorios (*).'; return; }
   if (pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
 
   btn.textContent = 'Creando cuenta...'; btn.disabled = true;
@@ -1013,7 +1015,7 @@ async function registrarAfiliado() {
     }
 
     await _db.collection('usuarios').doc(uid).set({
-      uid, nombre, apellido, email, telefono: tel,
+      uid, nombre, apellido, email, telefono: tel, fechaNacimiento: fechaNac,
       rol: 'afiliado', estado: 'pendiente',
       plan: plan || 'Sin definir',
       mascota: { nombre: mascota, raza, foto: fotoURL },
