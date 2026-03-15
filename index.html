@@ -686,66 +686,112 @@
 
 <!-- PLANES -->
 <section class="planes" id="planes">
-  <div style="max-width:1100px; margin:0 auto;">
+  <div style="max-width:1200px; margin:0 auto;">
     <div class="fade-up">
       <span class="section-label">Coberturas</span>
       <h2>Elegí el plan para tu compañero</h2>
       <p class="section-sub">Sin trámites complicados. Presentás tu carnet en la veterinaria y listo.</p>
+      <p style="font-size:.85rem;color:var(--texto-suave);margin-top:8px;">
+        🎁 <strong>20% OFF el primer mes</strong> &nbsp;·&nbsp; 🎟 <strong>10% siempre con LO365</strong>
+      </p>
     </div>
-    <div class="planes-grid">
-      <!-- BÁSICO -->
+    <div class="planes-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+
+      <!-- URGENCIAS -->
       <div class="plan-card fade-up">
-        <span class="plan-emoji">🐱</span>
-        <div class="plan-nombre">Básico</div>
-        <div class="plan-desc">Para quienes quieren tranquilidad sin comprometer el presupuesto.</div>
-        <div class="plan-precio">$16.000 <span>/mes</span></div>
-        <div class="plan-mes">por mascota</div>
+        <span class="plan-emoji">🚨</span>
+        <div class="plan-nombre" style="font-size:1rem;">MEDIPet Urgencias</div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--azul-principal);margin-bottom:6px;">Todas las edades</div>
+        <div class="plan-desc">Cobertura por accidente o enfermedad de riesgo vital.</div>
+        <div style="margin:12px 0 4px;">
+          <div style="font-size:.75rem;color:#9ca3af;text-decoration:line-through;">$29.985/mes</div>
+          <div class="plan-precio" style="font-size:1.5rem;">$23.988 <span>/mes</span></div>
+          <div style="font-size:.72rem;color:#22c55e;font-weight:700;margin-top:2px;">1er mes: $19.190</div>
+        </div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Consultas veterinarias</li>
-          <li><span class="check">✓</span> Vacunas del plan anual</li>
-          <li><span class="check">✓</span> Urgencias básicas</li>
-          <li><span class="check">✓</span> Atención presencial en Pergamino</li>
-          <li><span class="check">✓</span> Carnet MEDIPet digital</li>
+          <li><span class="check">✓</span> Emergencias veterinarias y guardias 24hs</li>
+          <li><span class="check">✓</span> Videollamada con veterinarios</li>
+          <li><span class="check">✓</span> Análisis y estudios</li>
+          <li><span class="check">✓</span> Cirugía</li>
+          <li><span class="check">✓</span> Traslados</li>
+          <li><span class="check">✓</span> Descuentos en medicamentos y más</li>
         </ul>
-        <a href="#" onclick="abrirModal('Básico');return false;" class="btn-plan btn-plan-light">Empezar con Básico</a>
+        <a href="#" onclick="abrirModal('MEDIPet Urgencias');return false;" class="btn-plan btn-plan-light">Contratar Urgencias</a>
       </div>
 
-      <!-- COMPLETO (destacado) -->
-      <div class="plan-card destacado fade-up" style="transition-delay:0.1s">
-        <div class="plan-badge">⭐ MÁS ELEGIDO</div>
+      <!-- JOVEN (destacado) -->
+      <div class="plan-card destacado fade-up" style="transition-delay:.1s">
+        <div class="plan-badge">🐾 MÁS ELEGIDO</div>
         <span class="plan-emoji">🐶</span>
-        <div class="plan-nombre">Completo</div>
-        <div class="plan-desc">Cobertura amplia para quienes tratan a su mascota como un miembro más de la familia.</div>
-        <div class="plan-precio">$45.000 <span>/mes</span></div>
-        <div class="plan-mes">por mascota</div>
+        <div class="plan-nombre" style="font-size:1rem;">MEDIPet Joven</div>
+        <div style="font-size:.75rem;font-weight:700;color:#5BA3E8;margin-bottom:6px;">Hasta 1 año</div>
+        <div class="plan-desc">Prevención y cuidado desde el primer día.</div>
+        <div style="margin:12px 0 4px;">
+          <div style="font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:line-through;">$73.485/mes</div>
+          <div class="plan-precio" style="font-size:1.5rem;">$58.788 <span>/mes</span></div>
+          <div style="font-size:.72rem;color:#4ade80;font-weight:700;margin-top:2px;">1er mes: $47.030</div>
+        </div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Todo el plan Básico</li>
-          <li><span class="check">✓</span> Limpieza dental anual</li>
-          <li><span class="check">✓</span> Estudios clínicos y análisis</li>
-          <li><span class="check">✓</span> Cirugías programadas</li>
-          <li><span class="check">✓</span> Castración incluida</li>
-          <li><span class="check">✓</span> Atención de urgencias 24h</li>
+          <li><span class="check">✓</span> Consultas veterinarias y guardias 24hs</li>
+          <li><span class="check">✓</span> Videollamada con veterinarios</li>
+          <li><span class="check">✓</span> Análisis y estudios</li>
+          <li><span class="check">✓</span> Cirugía e internación</li>
+          <li><span class="check">✓</span> Traslados</li>
+          <li><span class="check">✓</span> Nutricionista y especialista en comportamiento</li>
+          <li><span class="check">✓</span> Descuentos en medicamentos y vacunas</li>
         </ul>
-        <a href="#" onclick="abrirModal('Completo');return false;" class="btn-plan btn-plan-dark">Quiero el plan Completo</a>
+        <a href="#" onclick="abrirModal('MEDIPet Joven');return false;" class="btn-plan btn-plan-dark">Contratar Joven</a>
       </div>
 
-      <!-- PREMIUM -->
-      <div class="plan-card fade-up" style="transition-delay:0.2s">
-        <span class="plan-emoji">🌟</span>
-        <div class="plan-nombre">Premium</div>
-        <div class="plan-desc">Para mascotas que merecen lo mejor. Cobertura máxima sin límites.</div>
-        <div class="plan-precio">$90.000 <span>/mes</span></div>
-        <div class="plan-mes">por mascota</div>
+      <!-- ADULTO -->
+      <div class="plan-card fade-up" style="transition-delay:.2s">
+        <span class="plan-emoji">🐕</span>
+        <div class="plan-nombre" style="font-size:1rem;">MEDIPet Adulto</div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--azul-principal);margin-bottom:6px;">1 a 7 años</div>
+        <div class="plan-desc">El cuidado que necesita para estar sano y activo.</div>
+        <div style="margin:12px 0 4px;">
+          <div style="font-size:.75rem;color:#9ca3af;text-decoration:line-through;">$67.985/mes</div>
+          <div class="plan-precio" style="font-size:1.5rem;">$54.388 <span>/mes</span></div>
+          <div style="font-size:.72rem;color:#22c55e;font-weight:700;margin-top:2px;">1er mes: $43.510</div>
+        </div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Todo el plan Completo</li>
-          <li><span class="check">✓</span> Fisioterapia y rehabilitación</li>
-          <li><span class="check">✓</span> Oncología</li>
-          <li><span class="check">✓</span> Estudios de alta complejidad</li>
-          <li><span class="check">✓</span> Cobertura hasta $3.000.000</li>
-          <li><span class="check">✓</span> Cremación incluida</li>
+          <li><span class="check">✓</span> Consultas veterinarias y guardias 24hs</li>
+          <li><span class="check">✓</span> Videollamada con veterinarios</li>
+          <li><span class="check">✓</span> Análisis y estudios</li>
+          <li><span class="check">✓</span> Cirugía e internación</li>
+          <li><span class="check">✓</span> Traslados</li>
+          <li><span class="check">✓</span> Controles y tratamientos con especialistas</li>
+          <li><span class="check">✓</span> Tratamiento periodontal</li>
+          <li><span class="check">✓</span> Descuentos en medicamentos y vacunas</li>
         </ul>
-        <a href="#" onclick="abrirModal('Premium');return false;" class="btn-plan btn-plan-light">Quiero el Premium</a>
+        <a href="#" onclick="abrirModal('MEDIPet Adulto');return false;" class="btn-plan btn-plan-light">Contratar Adulto</a>
       </div>
+
+      <!-- SENIOR -->
+      <div class="plan-card fade-up" style="transition-delay:.3s">
+        <span class="plan-emoji">🐾</span>
+        <div class="plan-nombre" style="font-size:1rem;">MEDIPet Senior</div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--azul-principal);margin-bottom:6px;">Más de 7 años</div>
+        <div class="plan-desc">Prevención completa para la etapa de mayor atención.</div>
+        <div style="margin:12px 0 4px;">
+          <div style="font-size:.75rem;color:#9ca3af;text-decoration:line-through;">$88.485/mes</div>
+          <div class="plan-precio" style="font-size:1.5rem;">$70.788 <span>/mes</span></div>
+          <div style="font-size:.72rem;color:#22c55e;font-weight:700;margin-top:2px;">1er mes: $56.630</div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Consultas veterinarias y guardias 24hs</li>
+          <li><span class="check">✓</span> Videollamada con veterinarios</li>
+          <li><span class="check">✓</span> Análisis y estudios</li>
+          <li><span class="check">✓</span> Cirugía e internación</li>
+          <li><span class="check">✓</span> Traslados</li>
+          <li><span class="check">✓</span> Controles y tratamientos con especialistas</li>
+          <li><span class="check">✓</span> Tratamiento periodontal</li>
+          <li><span class="check">✓</span> Resonancia magnética</li>
+          <li><span class="check">✓</span> Descuentos en medicamentos y vacunas</li>
+        </ul>
+        <a href="#" onclick="abrirModal('MEDIPet Senior');return false;" class="btn-plan btn-plan-light">Contratar Senior</a>
+      </div>
+
     </div>
   </div>
 </section>
@@ -879,9 +925,10 @@
         <div><label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">Plan de la mascota</label>
           <select id="mPlan" class="modal-input">
             <option value="">Elegir plan...</option>
-            <option value="Básico">Básico — $16.000/mes</option>
-            <option value="Completo">Completo — $45.000/mes</option>
-            <option value="Premium">Premium — $90.000/mes</option>
+            <option value="MEDIPet Urgencias">MEDIPet Urgencias — $23.988/mes</option>
+            <option value="MEDIPet Joven">MEDIPet Joven — $58.788/mes</option>
+            <option value="MEDIPet Adulto">MEDIPet Adulto — $54.388/mes</option>
+            <option value="MEDIPet Senior">MEDIPet Senior — $70.788/mes</option>
           </select>
         </div>
         <div>
