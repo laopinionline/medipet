@@ -618,6 +618,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#planes">Planes</a></li>
+    <li><a href="#veterinarias">Veterinarias</a></li>
     <li><a href="#como">Cómo funciona</a></li>
     <li><a href="#porque">Por qué MEDIPet</a></li>
     <li><a href="https://laopinionline.github.io/medipet-app/" class="nav-cta" style="background:transparent;border:2px solid var(--azul-principal);color:var(--azul-principal) !important;margin-right:6px;">Zona de afiliados</a></li>
@@ -795,6 +796,248 @@
     </div>
   </div>
 </section>
+
+<!-- MAPA VETERINARIAS -->
+<section style="padding:80px 5%;background:white;" id="veterinarias">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:40px;">
+      <span class="section-label">Red de prestadores</span>
+      <h2>Cobertura en todo el país</h2>
+      <p class="section-sub">Más de 100 veterinarias adheridas en 19 provincias. Y si tu veterinario de confianza no está en la red, podés usarlo igual a través de nuestro <strong>sistema de reintegros</strong>.</p>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:16px;flex-wrap:wrap;">
+        <div style="background:#EBF3FC;border-radius:12px;padding:10px 20px;font-size:.85rem;font-weight:700;color:#1A5FB4;">🗺 19 provincias</div>
+        <div style="background:#EBF3FC;border-radius:12px;padding:10px 20px;font-size:.85rem;font-weight:700;color:#1A5FB4;">🏥 +100 veterinarias</div>
+        <div style="background:#EBF3FC;border-radius:12px;padding:10px 20px;font-size:.85rem;font-weight:700;color:#1A5FB4;">↩ Sistema de reintegros</div>
+      </div>
+    </div>
+
+    <!-- MAPA -->
+    <div style="border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(26,95,180,.15);margin-bottom:32px;">
+      <div id="mapa-vets" style="height:480px;width:100%;"></div>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <input id="buscadorVet" type="text" placeholder="Buscar por ciudad o nombre..." 
+        oninput="filtrarVets(this.value)"
+        style="flex:1;min-width:200px;padding:12px 16px;border:2px solid rgba(26,95,180,.15);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:600;outline:none;">
+      <select id="filtroProvinciaVet" onchange="filtrarVets(document.getElementById('buscadorVet').value)"
+        style="padding:12px 16px;border:2px solid rgba(26,95,180,.15);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:600;outline:none;background:white;cursor:pointer;">
+        <option value="">Todas las provincias</option>
+        <option>Buenos Aires (CABA)</option>
+        <option>Buenos Aires (Provincia)</option>
+        <option>Córdoba</option>
+        <option>Santa Fe</option>
+        <option>Tucumán</option>
+        <option>Salta</option>
+        <option>Jujuy</option>
+        <option>Misiones</option>
+        <option>Entre Ríos</option>
+        <option>Chaco</option>
+        <option>Santiago del Estero</option>
+        <option>Catamarca</option>
+        <option>Chubut</option>
+        <option>La Pampa</option>
+        <option>Río Negro</option>
+        <option>San Juan</option>
+        <option>Santa Cruz</option>
+        <option>Mendoza</option>
+        <option>Corrientes</option>
+      </select>
+    </div>
+
+    <!-- LISTA -->
+    <div id="listaVets" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;max-height:400px;overflow-y:auto;padding-right:4px;"></div>
+    <p style="font-size:.8rem;color:#9ca3af;margin-top:12px;text-align:center;">
+      ¿Tu veterinario no está en la lista? <a href="#" onclick="abrirModal();return false;" style="color:#1A5FB4;font-weight:700;">Consultanos sobre el sistema de reintegros →</a>
+    </p>
+  </div>
+</section>
+
+<script>
+// ── DATOS VETERINARIAS ──
+const VETS = [
+  {n:"LeoCan",d:"Manuel Ugarte 2226",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5566,lng:-58.4550},
+  {n:"LeoCan",d:"La Pampa 2755",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5580,lng:-58.4534},
+  {n:"Manchitas",d:"Sucre 2755",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5590,lng:-58.4520},
+  {n:"Manimal",d:"Padre Juan B. Neumann 1488",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5610,lng:-58.4490},
+  {n:"Vet Care",d:"Ciudad de la Paz 2020",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5600,lng:-58.4500},
+  {n:"Veterinaria Company",d:"Virrey del Pino 2566",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5620,lng:-58.4510},
+  {n:"Felicidad Pet Boutique",d:"Blanco Encalada 2096",c:"Belgrano",p:"Buenos Aires (CABA)",lat:-34.5570,lng:-58.4540},
+  {n:"VetLine",d:"Aguero 1219",c:"Palermo",p:"Buenos Aires (CABA)",lat:-34.5870,lng:-58.4080},
+  {n:"LeoCan",d:"Bulnes 1286",c:"Palermo",p:"Buenos Aires (CABA)",lat:-34.5880,lng:-58.4100},
+  {n:"Vetnova",d:"Marcelo T. de Alvear 1615",c:"Recoleta",p:"Buenos Aires (CABA)",lat:-34.5960,lng:-58.3930},
+  {n:"Veterinaria Bonaire",d:"Junin 654",c:"Recoleta",p:"Buenos Aires (CABA)",lat:-34.5950,lng:-58.3960},
+  {n:"LeoCan",d:"Av. Gral. Paz 832",c:"Nuñez",p:"Buenos Aires (CABA)",lat:-34.5450,lng:-58.4650},
+  {n:"Veterinaria Merli",d:"Cnel. Apolinario Figueroa 299",c:"Villa Crespo",p:"Buenos Aires (CABA)",lat:-34.6020,lng:-58.4370},
+  {n:"Linares",d:"Av. Eva Perón 2143",c:"Flores",p:"Buenos Aires (CABA)",lat:-34.6300,lng:-58.4600},
+  {n:"JM Veterinaria",d:"Av. Lope de Vega 1606",c:"Monte Castro",p:"Buenos Aires (CABA)",lat:-34.6200,lng:-58.4900},
+  {n:"La Vete",d:"Av. Argentina 5793",c:"Villa Lugano",p:"Buenos Aires (CABA)",lat:-34.6700,lng:-58.4700},
+  {n:"Veterinaria San Juan",d:"Ruiz Huidobro 4090",c:"Saavedra",p:"Buenos Aires (CABA)",lat:-34.5480,lng:-58.4880},
+  {n:"Fernandez Maria Luz",d:"Av. del Barco Centenera 1201",c:"Parque Chacabuco",p:"Buenos Aires (CABA)",lat:-34.6380,lng:-58.4270},
+  {n:"Dra. Luka Clínica Felina",d:"Gral Gregorio Lemos 33",c:"Chacarita",p:"Buenos Aires (CABA)",lat:-34.5850,lng:-58.4530},
+  {n:"Go Pets",d:"Av. de los Lagos 5855",c:"Nordelta",p:"Buenos Aires (Provincia)",lat:-34.3950,lng:-58.6700},
+  {n:"Almanimal",d:"Av. Manuel Belgrano 5999",c:"Avellaneda",p:"Buenos Aires (Provincia)",lat:-34.6650,lng:-58.3680},
+  {n:"Clínica Veterinaria Ameghino",d:"Av. Ameghino 680",c:"Campana",p:"Buenos Aires (Provincia)",lat:-34.1660,lng:-58.9580},
+  {n:"Ainhoa Pet Shop",d:"Rosales 452",c:"San Miguel",p:"Buenos Aires (Provincia)",lat:-34.5430,lng:-58.7150},
+  {n:"Moquehua",d:"Av. Pte Perón 2951",c:"San Miguel",p:"Buenos Aires (Provincia)",lat:-34.5450,lng:-58.7170},
+  {n:"Veterinaria Viamonte",d:"Viamonte 1594",c:"Lanús",p:"Buenos Aires (Provincia)",lat:-34.7030,lng:-58.3940},
+  {n:"Centro Veterinario Morón",d:"Av. Rivadavia 17483",c:"Morón",p:"Buenos Aires (Provincia)",lat:-34.6530,lng:-58.6190},
+  {n:"El Trébol",d:"Ricardo Balbin 751",c:"Morón",p:"Buenos Aires (Provincia)",lat:-34.6560,lng:-58.6210},
+  {n:"Hospital Veterinario del Oeste",d:"Av. Gral Paz 11939",c:"Lomas del Mirador",p:"Buenos Aires (Provincia)",lat:-34.6620,lng:-58.5550},
+  {n:"WillVet",d:"Lavalle 151",c:"Bernal",p:"Buenos Aires (Provincia)",lat:-34.7050,lng:-58.2810},
+  {n:"Clínica Veterinaria Bernal",d:"José Manuel Estrada 14",c:"Bernal",p:"Buenos Aires (Provincia)",lat:-34.7080,lng:-58.2820},
+  {n:"Veterinaria Colombres",d:"Calle Molina Arrotea 619",c:"Lomas de Zamora",p:"Buenos Aires (Provincia)",lat:-34.7550,lng:-58.4050},
+  {n:"El Triángulo",d:"Pte. Nestor Kirchner 336",c:"Ezeiza",p:"Buenos Aires (Provincia)",lat:-34.8520,lng:-58.5200},
+  {n:"Veterinaria Dame la Pata",d:"Sarmiento 529",c:"Bahía Blanca",p:"Buenos Aires (Provincia)",lat:-38.7196,lng:-62.2724},
+  {n:"Veterinaria San Francisco",d:"Plaza España 113",c:"La Plata",p:"Buenos Aires (Provincia)",lat:-34.9205,lng:-57.9536},
+  {n:"Veterinaria San Francisco",d:"Soldado Baigorria 1648",c:"Grand Bourg",p:"Buenos Aires (Provincia)",lat:-34.4800,lng:-58.7200},
+  {n:"Clínica Veterinaria Romero",d:"Rivadavia 3226",c:"Olavarría",p:"Buenos Aires (Provincia)",lat:-36.8928,lng:-60.3220},
+  {n:"Vetland Baires",d:"Fondo de La Legua 2611",c:"Villa Adelina",p:"Buenos Aires (Provincia)",lat:-34.5100,lng:-58.5500},
+  {n:"Cempa",d:"Mascagni 2506",c:"Hurlingham",p:"Buenos Aires (Provincia)",lat:-34.5880,lng:-58.6390},
+  {n:"Maria Mercedes Abadia",d:"San Martín 996",c:"Pergamino",p:"Buenos Aires (Provincia)",lat:-33.8900,lng:-60.5600},
+  {n:"Mundo Pet",d:"Av. Santa Rosa 869",c:"Castelar",p:"Buenos Aires (Provincia)",lat:-34.6540,lng:-58.6430},
+  {n:"Diaz Velez",d:"Diag. San Martín 1431",c:"Necochea",p:"Buenos Aires (Provincia)",lat:-38.5553,lng:-58.7377},
+  {n:"Clínica Veterinaria Udaondo",d:"Gdor. Guillermo Udaondo 1102",c:"Ituzaingo",p:"Buenos Aires (Provincia)",lat:-34.6580,lng:-58.6680},
+  {n:"Go Pets",d:"Colectora Ruta 25 N°9605",c:"Escobar",p:"Buenos Aires (Provincia)",lat:-34.3460,lng:-58.7960},
+  {n:"VET Clínica",d:"Arenales 2186",c:"Martínez",p:"Buenos Aires (Provincia)",lat:-34.4890,lng:-58.5140},
+  {n:"Veterinaria San Carlos",d:"Calle 4 426",c:"Berazategui",p:"Buenos Aires (Provincia)",lat:-34.7640,lng:-58.2100},
+  {n:"Mascotas Unir",d:"Pte. Perón 3335",c:"San Justo",p:"Buenos Aires (Provincia)",lat:-34.6860,lng:-58.5620},
+  {n:"Cegave",d:"Av. Constitución 7124",c:"Mar del Plata",p:"Buenos Aires (Provincia)",lat:-38.0055,lng:-57.5426},
+  {n:"Animal House",d:"Dorrego 1338",c:"Mar del Plata",p:"Buenos Aires (Provincia)",lat:-38.0100,lng:-57.5480},
+  {n:"Clínica Veterinaria Jaguel",d:"Av. Juan B. Justo 3680",c:"Córdoba",p:"Córdoba",lat:-31.4201,lng:-64.1888},
+  {n:"Summa Veterinaria",d:"José Roque Funes 1660",c:"Córdoba",p:"Córdoba",lat:-31.4250,lng:-64.1920},
+  {n:"HVC S.A.S",d:"Fructuoso Rivera 35",c:"Córdoba",p:"Córdoba",lat:-31.4180,lng:-64.1850},
+  {n:"Wild-Vet",d:"Juan del Campillo 831",c:"Córdoba",p:"Córdoba",lat:-31.4300,lng:-64.2000},
+  {n:"Veterinaria Cruz del Eje",d:"Pellegrini 489",c:"Cruz del Eje",p:"Córdoba",lat:-30.7260,lng:-64.8040},
+  {n:"Clínica Veterinaria Peon Pets",d:"9 de Julio 527",c:"La Falda",p:"Córdoba",lat:-31.0900,lng:-64.4900},
+  {n:"La Cucha",d:"Felipe Erdman 290",c:"Villa Dolores",p:"Córdoba",lat:-31.9450,lng:-65.1970},
+  {n:"Veterinaria Pasteur",d:"Velez Sarfield 570",c:"Río Tercero",p:"Córdoba",lat:-32.1720,lng:-64.1080},
+  {n:"Veterinaria Dr. Seba",d:"Pellegrini 449",c:"Villa María",p:"Córdoba",lat:-32.4100,lng:-63.2400},
+  {n:"Veterinaria Del Lago",d:"H. Yrigoyen 101",c:"Villa Carlos Paz",p:"Córdoba",lat:-31.4230,lng:-64.4980},
+  {n:"Veterinaria El Corralito",d:"Arzobispo Castellanos 105",c:"Alta Gracia",p:"Córdoba",lat:-31.6540,lng:-64.4310},
+  {n:"Mascotas del Oeste",d:"Av. Eva Perón 7750",c:"Rosario",p:"Santa Fe",lat:-32.9587,lng:-60.6931},
+  {n:"SIVET Clínica",d:"Italia 75",c:"Rosario",p:"Santa Fe",lat:-32.9550,lng:-60.6400},
+  {n:"VET24HS",d:"Urquiza 2023",c:"Rosario",p:"Santa Fe",lat:-32.9500,lng:-60.6350},
+  {n:"Cruz Azul",d:"Avellaneda 3434",c:"Santa Fe",p:"Santa Fe",lat:-31.6333,lng:-60.7000},
+  {n:"MD Clínica Veterinaria",d:"Gobernador Freyre 5176",c:"Santa Fe",p:"Santa Fe",lat:-31.6400,lng:-60.7100},
+  {n:"Veterinaria Aparicio",d:"Primera Junta 3926",c:"Santa Fe",p:"Santa Fe",lat:-31.6380,lng:-60.7050},
+  {n:"Veterinaria Médica y Quirúrgica Culzoni",d:"Agustin Alvarez 546",c:"Rafaela",p:"Santa Fe",lat:-31.2520,lng:-61.4870},
+  {n:"Estacion Animal",d:"Mitre 1525",c:"Reconquista",p:"Santa Fe",lat:-29.1450,lng:-59.6430},
+  {n:"Empalme VET",d:"Urquiza 100",c:"Villa Constitución",p:"Santa Fe",lat:-33.2290,lng:-60.3370},
+  {n:"Dr. Claudia Sandoval",d:"Araza 625",c:"Resistencia",p:"Chaco",lat:-27.4514,lng:-58.9869},
+  {n:"Ciba Clínica de Bienestar Animal",d:"Av. Las Americas 254",c:"S. M. de Tucumán",p:"Tucumán",lat:-26.8241,lng:-65.2226},
+  {n:"La Mascotera",d:"Laprida 307",c:"S. M. de Tucumán",p:"Tucumán",lat:-26.8300,lng:-65.2200},
+  {n:"La Mascotera",d:"Av. Belgrano 1898",c:"S. M. de Tucumán",p:"Tucumán",lat:-26.8350,lng:-65.2150},
+  {n:"La Mascotera",d:"Av. San Martín 286",c:"Banda del Río Salí",p:"Tucumán",lat:-26.8400,lng:-65.1750},
+  {n:"La Mascotera",d:"Av. Perón 1750",c:"Yerba Buena",p:"Tucumán",lat:-26.8150,lng:-65.2800},
+  {n:"La Mascotera Jujuy",d:"Salta 899",c:"S. S. de Jujuy",p:"Jujuy",lat:-24.1858,lng:-65.2995},
+  {n:"La Mascotera Jujuy",d:"General Lamadrid 356",c:"S. S. de Jujuy",p:"Jujuy",lat:-24.1900,lng:-65.3050},
+  {n:"Veterinaria Alsina",d:"Alsina 325",c:"Salta",p:"Salta",lat:-24.7821,lng:-65.4232},
+  {n:"La Mascotera Salta",d:"Leguizamon 468",c:"Salta",p:"Salta",lat:-24.7850,lng:-65.4200},
+  {n:"La Mascotera Orán",d:"Coronel Egues 393",c:"Orán",p:"Salta",lat:-23.1330,lng:-64.3290},
+  {n:"Quinta Pata",d:"Lopez y Planes 3306",c:"Posadas",p:"Misiones",lat:-27.3621,lng:-55.8961},
+  {n:"Quinta Pata",d:"Av. Quaranta 3278",c:"Posadas",p:"Misiones",lat:-27.3680,lng:-55.9010},
+  {n:"Agroveterinaria Gross",d:"Av. Libertad 315",c:"Oberá",p:"Misiones",lat:-27.4890,lng:-55.1190},
+  {n:"La Mascotera Santiago",d:"Belgrano Sur 1917",c:"Santiago del Estero",p:"Santiago del Estero",lat:-27.7951,lng:-64.2615},
+  {n:"Clínica Veterinaria Lucca",d:"Belgrano Norte 1468",c:"Santiago del Estero",p:"Santiago del Estero",lat:-27.7900,lng:-64.2580},
+  {n:"Pet Land",d:"Belgrano 358",c:"Paraná",p:"Entre Ríos",lat:-31.7333,lng:-60.5291},
+  {n:"Como Perro y Gato",d:"Gral Pedro Ferre 135",c:"Paraná",p:"Entre Ríos",lat:-31.7380,lng:-60.5320},
+  {n:"Hospital Veterinario Gualeguaychú",d:"Urquiza 225",c:"Gualeguaychú",p:"Entre Ríos",lat:-33.0100,lng:-58.5160},
+  {n:"La Mascotera Catamarca",d:"Tucumán 780",c:"Catamarca",p:"Catamarca",lat:-28.4696,lng:-65.7852},
+  {n:"Clínica Veterinaria Peirano",d:"Av. Gobernador Galindez 695",c:"Catamarca",p:"Catamarca",lat:-28.4750,lng:-65.7900},
+  {n:"Centro Veterinario Austral",d:"Moreno 1205",c:"Puerto Madryn",p:"Chubut",lat:-42.7692,lng:-65.0385},
+  {n:"Clínica Veterinaria Pueyrredon",d:"Av. Julio Argentino Roca 556",c:"Comodoro Rivadavia",p:"Chubut",lat:-45.8645,lng:-67.4966},
+  {n:"CIAVET",d:"Calle 17 n° 195",c:"General Pico",p:"La Pampa",lat:-35.6566,lng:-63.7574},
+  {n:"Veterinaria Bastard",d:"J. M. Guido 616",c:"Viedma",p:"Río Negro",lat:-40.8135,lng:-62.9967},
+  {n:"La Granja Vip",d:"Luis Toschi 560",c:"Cipolletti",p:"Río Negro",lat:-38.9440,lng:-68.0030},
+  {n:"Veterinaria Montilla",d:"Tucuman 1342 Sur",c:"San Juan",p:"San Juan",lat:-31.5375,lng:-68.5364},
+  {n:"Clínica Mundo Animal",d:"San José Obrero 446",c:"Caleta Olivia",p:"Santa Cruz",lat:-46.4390,lng:-67.5270},
+  {n:"Veterinaria Avenida",d:"San Martín sur 1176",c:"Godoy Cruz",p:"Mendoza",lat:-32.9279,lng:-68.8460},
+  {n:"Veterinaria San Martín",d:"San Martín 2239",c:"Mercedes",p:"Corrientes",lat:-29.1830,lng:-58.0790},
+];
+
+let mapaVets = null;
+let markersVets = [];
+let vetsVisibles = [...VETS];
+
+function initMapaVets() {
+  if (mapaVets) return;
+  mapaVets = L.map('mapa-vets').setView([-38, -63], 4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(mapaVets);
+  
+  const iconVet = L.divIcon({
+    html: '<div style="background:#1A5FB4;width:10px;height:10px;border-radius:50%;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.4);"></div>',
+    className: '', iconSize: [10,10], iconAnchor: [5,5]
+  });
+  
+  VETS.forEach(v => {
+    const m = L.marker([v.lat, v.lng], {icon: iconVet})
+      .bindPopup(`<strong>${v.n}</strong><br>${v.d}<br><span style="color:#5a6a8a;">${v.c} · ${v.p}</span>`, {maxWidth: 220})
+      .addTo(mapaVets);
+    markersVets.push({marker: m, data: v});
+  });
+  renderListaVets(VETS);
+}
+
+function filtrarVets(texto) {
+  const prov = document.getElementById('filtroProvinciaVet').value.toLowerCase();
+  const txt = texto.toLowerCase();
+  const filtrados = VETS.filter(v => {
+    const matchTxt = !txt || v.n.toLowerCase().includes(txt) || v.c.toLowerCase().includes(txt) || v.d.toLowerCase().includes(txt);
+    const matchProv = !prov || v.p.toLowerCase().includes(prov);
+    return matchTxt && matchProv;
+  });
+  
+  markersVets.forEach(({marker, data}) => {
+    const visible = filtrados.includes(data);
+    if (visible) marker.addTo(mapaVets); else mapaVets.removeLayer(marker);
+  });
+  
+  renderListaVets(filtrados);
+  if (filtrados.length > 0 && filtrados.length < VETS.length) {
+    const lats = filtrados.map(v => v.lat), lngs = filtrados.map(v => v.lng);
+    mapaVets.fitBounds([[Math.min(...lats)-0.5, Math.min(...lngs)-0.5],[Math.max(...lats)+0.5, Math.max(...lngs)+0.5]]);
+  }
+}
+
+function renderListaVets(lista) {
+  const el = document.getElementById('listaVets');
+  if (!el) return;
+  el.innerHTML = lista.length === 0
+    ? '<p style="color:#9ca3af;font-size:.85rem;padding:12px;">Sin resultados.</p>'
+    : lista.map(v => `
+      <div onclick="mapaVets.setView([${v.lat},${v.lng}],15);mapaVets.eachLayer(l=>l.getPopup&&l._latlng&&l._latlng.lat===${v.lat}&&l.openPopup())"
+        style="background:#F5F7FA;border-radius:10px;padding:12px;cursor:pointer;border:1px solid rgba(26,95,180,.08);transition:border-color .2s;"
+        onmouseover="this.style.borderColor='#5BA3E8'" onmouseout="this.style.borderColor='rgba(26,95,180,.08)'">
+        <div style="font-weight:700;font-size:.85rem;">🏥 ${v.n}</div>
+        <div style="font-size:.75rem;color:#5a6a8a;margin-top:2px;">${v.d}</div>
+        <div style="font-size:.72rem;color:#9ca3af;">${v.c} · ${v.p}</div>
+      </div>`).join('');
+}
+
+// Cargar Leaflet y el mapa cuando la sección sea visible
+const obsVets = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    if (!document.getElementById('leaflet-css')) {
+      const css = document.createElement('link');
+      css.id = 'leaflet-css'; css.rel = 'stylesheet';
+      css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(css);
+      const js = document.createElement('script');
+      js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      js.onload = () => setTimeout(initMapaVets, 100);
+      document.head.appendChild(js);
+    } else if (typeof L !== 'undefined') {
+      initMapaVets();
+    }
+    obsVets.disconnect();
+  }
+}, {threshold: 0.1});
+obsVets.observe(document.getElementById('veterinarias'));
+</script>
 
 <!-- CÓMO FUNCIONA -->
 <section class="como" id="como">
