@@ -619,6 +619,7 @@
   <ul class="nav-links">
     <li><a href="#planes">Planes</a></li>
     <li><a href="#veterinarias">Veterinarias</a></li>
+    <li><a href="#comparativa">Comparar planes</a></li>
     <li><a href="#como">Cómo funciona</a></li>
     <li><a href="#porque">Por qué MEDIPet</a></li>
     <li><a href="https://laopinionline.github.io/medipet-app/" class="nav-cta" style="background:transparent;border:2px solid var(--azul-principal);color:var(--azul-principal) !important;margin-right:6px;">Zona de afiliados</a></li>
@@ -1037,6 +1038,263 @@ const obsVets = new IntersectionObserver((entries) => {
   }
 }, {threshold: 0.1});
 obsVets.observe(document.getElementById('veterinarias'));
+</script>
+
+<!-- TABLA COMPARATIVA DE PLANES -->
+<section style="padding:80px 5%;background:var(--fondo);" id="comparativa">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:40px;">
+      <span class="section-label">Compará los planes</span>
+      <h2>¿Qué cubre cada plan?</h2>
+      <p class="section-sub">Todos los detalles en un vistazo. Hacé clic en cada categoría para ver las coberturas.</p>
+    </div>
+
+    <!-- HEADER PLANES -->
+    <div style="background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(26,95,180,.1);">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--noche);color:white;padding:16px 20px;gap:8px;position:sticky;top:64px;z-index:5;">
+        <div style="font-size:.8rem;font-weight:700;opacity:.6;">COBERTURA</div>
+        <div style="text-align:center;">
+          <div style="font-size:.65rem;font-weight:700;color:#5BA3E8;letter-spacing:.5px;">URGENCIAS</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);">Todas las edades</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:.65rem;font-weight:700;color:#5BA3E8;letter-spacing:.5px;">JOVEN</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);">Hasta 1 año</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:.65rem;font-weight:700;color:#5BA3E8;letter-spacing:.5px;">ADULTO</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);">1 a 7 años</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:.65rem;font-weight:700;color:#4ade80;letter-spacing:.5px;">SENIOR</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.5);">+7 años</div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 1: CONSULTA VETERINARIA -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>🩺 Consulta veterinaria</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Consultas y guardia 24hs</strong><br><small>2 por año · tope $35.000 c/u · Subsiguientes 20% off</small></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Veterinario online</strong><br><small>Acceso ilimitado los 365 días</small></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 2: CUIDADO REGULAR -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>💊 Cuidado regular</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Medicamentos</strong><br><small>2 por año · hasta 25% off c/u</small></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Vacunas</strong><br><small>hasta 25% off c/u</small></div>
+            <div class="comp-cell">❌</div>
+            <div class="comp-cell"><span class="comp-tag">5 por año</span></div>
+            <div class="comp-cell"><span class="comp-tag">2 por año</span></div>
+            <div class="comp-cell"><span class="comp-tag">2 por año</span></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Desparasitación</strong><br><small>2 por año · hasta 25% off c/u</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Traslado con mascota</strong><br><small>2 por año · hasta 10km c/u</small></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 3: ALTA COMPLEJIDAD -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>🔬 Estudio y tratamiento de alta complejidad</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Análisis bioquímico</strong><br><small>1 por año · tope $25.000</small></div>
+            <div class="comp-cell">✅</div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Diagnóstico por imagen y estudio cardiológico</strong><br><small>1 por año · tope $35.000</small></div>
+            <div class="comp-cell">✅</div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Resonancia magnética</strong><br><small>1 por año · 50% off · tope $80.000</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div><div class="comp-cell">❌</div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde los 60 días</small></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Tratamiento periodontal</strong><br><small>1 por año · 50% off</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">tope $60.000 · desde 90 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">tope $80.000 · desde 90 días</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 4: CIRUGÍA E INTERNACIÓN -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>🏥 Intervención quirúrgica e internación</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Intervención quirúrgica</strong><br><small>1 por año · 50% off</small></div>
+            <div class="comp-cell"><span class="comp-tag">tope $200.000</span></div>
+            <div class="comp-cell"><span class="comp-tag">tope $200.000</span><br><small style="color:#9ca3af;">desde 90 días</small></div>
+            <div class="comp-cell"><span class="comp-tag">tope $200.000</span><br><small style="color:#9ca3af;">desde 90 días</small></div>
+            <div class="comp-cell"><span class="comp-tag">tope $300.000</span><br><small style="color:#9ca3af;">desde 90 días</small></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Internación</strong><br><small>1 por año · 50% off · tope $100.000</small></div>
+            <div class="comp-cell">❌</div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde 90 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde 90 días</small></div>
+            <div class="comp-cell">✅<br><small style="color:#9ca3af;">desde 90 días</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 5: ESPECIALISTAS -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>👨‍⚕️ Control y tratamiento con especialistas</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Nutricionista</strong><br><small>3 sesiones por año</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Etólogo</strong><br><small>Conducta y comportamiento · tope $30.000 c/u</small></div>
+            <div class="comp-cell">❌</div>
+            <div class="comp-cell"><span class="comp-tag">3 ses./año</span></div>
+            <div class="comp-cell"><span class="comp-tag">2 ses./año</span></div>
+            <div class="comp-cell"><span class="comp-tag">3 ses./año</span></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Especialidades</strong><br><small>Dermatología, Oftalmología, Nefro urología, Gastroenterología, Endocrinología, Clínico, Odontología, Traumatología, Fisioterapia, Oncología · tope $30.000 c/u</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div>
+            <div class="comp-cell"><span class="comp-tag">2 ses./año<br>50% off</span></div>
+            <div class="comp-cell"><span class="comp-tag">3 ses./año<br>50% off</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍA 6: CUIDADO ADICIONAL -->
+      <div class="cat-block">
+        <div class="cat-header" onclick="toggleCat(this)">
+          <span>✨ Cuidado adicional</span><span class="cat-arrow">▾</span>
+        </div>
+        <div class="cat-body">
+          <div class="comp-row">
+            <div class="comp-label"><strong>Higiene complementaria</strong><br><small>1 por año · hasta 25% off</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Baño / peluquería</strong><br><small>1 por año · hasta 25% off</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Descuentos en alimentos y accesorios</strong></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-label"><strong>Asesoramiento legal telefónico</strong></div>
+            <div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+          <div class="comp-row" style="border-bottom:none;">
+            <div class="comp-label"><strong>Cremación</strong><br><small>Tope $100.000</small></div>
+            <div class="comp-cell">❌</div><div class="comp-cell">❌</div><div class="comp-cell">✅</div><div class="comp-cell">✅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER CTA -->
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;padding:16px 20px;background:#F5F7FA;">
+        <div style="font-size:.8rem;font-weight:700;color:#5a6a8a;display:flex;align-items:center;">Elegí tu plan</div>
+        <div style="text-align:center;"><button onclick="abrirModal('MEDIPet Urgencias')" class="btn-comp">$23.988</button></div>
+        <div style="text-align:center;"><button onclick="abrirModal('MEDIPet Joven')" class="btn-comp btn-comp-dest">$58.788</button></div>
+        <div style="text-align:center;"><button onclick="abrirModal('MEDIPet Adulto')" class="btn-comp">$54.388</button></div>
+        <div style="text-align:center;"><button onclick="abrirModal('MEDIPet Senior')" class="btn-comp">$70.788</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.cat-block { border-bottom: 1px solid rgba(26,95,180,.07); }
+.cat-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px; cursor: pointer; font-weight: 800; font-size: .9rem;
+  color: var(--noche); background: white; transition: background .15s;
+  user-select: none;
+}
+.cat-header:hover { background: #F5F7FA; }
+.cat-arrow { font-size: .8rem; transition: transform .2s; color: #1A5FB4; }
+.cat-body { display: none; }
+.cat-body.open { display: block; }
+.comp-row {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 8px; padding: 12px 20px; border-top: 1px solid rgba(26,95,180,.05);
+  align-items: center; background: white;
+}
+.comp-row:hover { background: #FAFBFF; }
+.comp-label { font-size: .82rem; color: var(--texto); }
+.comp-label small { color: #9ca3af; font-size: .72rem; }
+.comp-cell { text-align: center; font-size: .85rem; line-height: 1.4; }
+.comp-tag {
+  display: inline-block; background: #EBF3FC; color: #1A5FB4;
+  font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 6px;
+  line-height: 1.5;
+}
+.btn-comp {
+  background: #EBF3FC; color: #1A5FB4; border: none; border-radius: 100px;
+  padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: .78rem;
+  font-weight: 800; cursor: pointer; width: 100%; transition: all .2s;
+}
+.btn-comp:hover { background: #1A5FB4; color: white; }
+.btn-comp-dest { background: #1A5FB4; color: white; }
+.btn-comp-dest:hover { background: #0D1B3E; }
+
+@media (max-width: 600px) {
+  .comp-row, #comparativa .cat-header + div + div { grid-template-columns: 1.5fr repeat(4, 1fr); }
+  .comp-label small { display: none; }
+  [style*="grid-template-columns:2fr 1fr 1fr 1fr 1fr"] { grid-template-columns: 1.5fr repeat(4, 1fr) !important; }
+}
+</style>
+
+<script>
+function toggleCat(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.cat-arrow');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+// Abrir la primera categoría por defecto
+document.addEventListener('DOMContentLoaded', () => {
+  const first = document.querySelector('.cat-header');
+  if (first) toggleCat(first);
+});
 </script>
 
 <!-- CÓMO FUNCIONA -->
