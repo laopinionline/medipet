@@ -620,6 +620,7 @@
     <li><a href="#planes">Planes</a></li>
     <li><a href="#veterinarias">Veterinarias</a></li>
     <li><a href="#comparativa">Comparar planes</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="#como">Cómo funciona</a></li>
     <li><a href="#porque">Por qué MEDIPaw</a></li>
     <li><a href="https://laopinionline.github.io/medipet-app/" class="nav-cta" style="background:transparent;border:2px solid var(--azul-principal);color:var(--azul-principal) !important;margin-right:6px;">Zona de afiliados</a></li>
@@ -1389,6 +1390,106 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 
+
+<!-- FAQ -->
+<section style="padding:80px 5%;background:white;" id="faq">
+  <div style="max-width:780px;margin:0 auto;">
+    <div class="fade-up" style="text-align:center;margin-bottom:48px;">
+      <span class="section-label">Preguntas frecuentes</span>
+      <h2>Todo lo que necesitás saber</h2>
+      <p class="section-sub">Si tu pregunta no está acá, escribinos y te respondemos.</p>
+    </div>
+
+    <div id="faq-lista"></div>
+  </div>
+</section>
+
+<style>
+.faq-item { border-bottom: 1px solid rgba(26,95,180,.1); }
+.faq-pregunta {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 20px 4px; cursor: pointer; gap: 16px;
+  font-size: 1rem; font-weight: 800; color: var(--noche);
+  user-select: none; transition: color .2s;
+}
+.faq-pregunta:hover { color: var(--azul-principal); }
+.faq-icono {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--azul-pale); color: var(--azul-principal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; font-weight: 900; transition: all .2s; margin-top: 2px;
+}
+.faq-respuesta {
+  display: none; padding: 0 4px 20px;
+  font-size: .9rem; color: var(--texto-suave); line-height: 1.8;
+}
+.faq-respuesta.open { display: block; }
+.faq-item.open .faq-icono { background: var(--azul-principal); color: white; transform: rotate(45deg); }
+</style>
+
+<script>
+const FAQS = [
+  {
+    q: "¿Dónde puedo atender a mi mascota?",
+    r: "Tenés acceso a nuestra red de más de 100 veterinarias adheridas en todo el país. Si la clínica que preferís no forma parte de la red, igual podés atenderte ahí a través de nuestro sistema de reintegros, de forma simple y rápida. Además, todos los planes incluyen videollamadas ilimitadas con veterinarios online, ideales para consultas rápidas o dudas sobre síntomas desde donde estés."
+  },
+  {
+    q: "¿Cómo funciona el reintegro?",
+    r: "Si tu veterinario de confianza no está en nuestra red, podés atenderte igual y luego gestionar el reintegro de manera sencilla. Esto te da la libertad de elegir el profesional que mejor se adapte a vos, sin perder el respaldo de tu plan MEDIPaw."
+  },
+  {
+    q: "¿Cómo es el proceso de atención?",
+    r: "La coordinación de asistencias veterinarias está disponible las 24 horas, los 7 días de la semana. Presentás tu carnet digital en la veterinaria y tu mascota recibe atención directa. Para consultas administrativas o soporte, nuestro equipo de atención al cliente te responde en el horario establecido."
+  },
+  {
+    q: "Si mi mascota es parte de la familia, ¿por qué no darle un plan de salud?",
+    r: "La salud de tu mascota es tan importante como la tuya. Un plan MEDIPaw no solo cubre emergencias — también se enfoca en la medicina preventiva, que es clave para mantener a tu perro o gato saludable y feliz por más tiempo. Con controles regulares podés identificar problemas antes de que se conviertan en algo mayor. La prevención es la mejor forma de cuidar de ellos."
+  },
+  {
+    q: "¿Por qué es importante elegir un plan según la etapa de vida de mi mascota?",
+    r: "Las necesidades de tu mascota cambian con la edad. Un cachorro necesita vacunas y control del comportamiento; un adulto requiere estudios de rutina y tratamientos preventivos; un senior demanda mayor seguimiento con especialistas. Nuestros planes Joven, Adulto y Senior están diseñados exactamente para eso: acompañar a tu mascota con los beneficios que corresponden a cada etapa."
+  },
+  {
+    q: "¿Puedo inscribir a mi mascota sin importar la raza, edad o condiciones preexistentes?",
+    r: "Sí. En MEDIPaw aceptamos perros y gatos de cualquier raza, edad o condición preexistente. Nuestros planes están pensados según la etapa de vida de tu compañero, pero vos podés elegir el que mejor se adapte a lo que necesitan juntos."
+  },
+  {
+    q: "¿Qué pasa luego de contratar el plan?",
+    r: "Una vez completado el formulario de afiliación, nuestro equipo lo revisa y activa tu cuenta en un plazo de 24 horas hábiles. Vas a recibir un mensaje de confirmación con todos los accesos necesarios para comenzar a usar tu plan, incluyendo tu carnet digital. Ante cualquier consulta podés comunicarte con nosotros directamente."
+  },
+  {
+    q: "¿Cuál es la diferencia entre un plan de salud y un seguro para mascotas?",
+    r: "Un seguro cubre eventos puntuales y te paga después. Un plan de salud MEDIPaw es diferente: te acompaña de forma continua, priorizando la prevención, las revisiones regulares y el acceso directo a la atención. Estás invirtiendo en el bienestar diario de tu mascota, no solo en una compensación si algo sale mal. Porque cada momento de salud cuenta."
+  }
+];
+
+const lista = document.getElementById('faq-lista');
+lista.innerHTML = FAQS.map((f, i) => `
+  <div class="faq-item fade-up" style="transition-delay:${i * 0.05}s">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">
+      <span>${f.q}</span>
+      <div class="faq-icono">+</div>
+    </div>
+    <div class="faq-respuesta">${f.r}</div>
+  </div>
+`).join('');
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const resp = item.querySelector('.faq-respuesta');
+  const isOpen = item.classList.contains('open');
+  // Cerrar todos
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-respuesta').classList.remove('open');
+  });
+  // Abrir el clickeado si estaba cerrado
+  if (!isOpen) {
+    item.classList.add('open');
+    resp.classList.add('open');
+  }
+}
+</script>
 
 <!-- CTA FINAL -->
 <div class="cta-final">
