@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>MEDIPaw — Ficha de mascota</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--azul:#1A5FB4;--azul-medio:#2272D9;--azul-claro:#5BA3E8;--azul-pale:#EBF3FC;--noche:#0D1B3E;--fondo:#F5F7FA;--texto:#1a2340;--suave:#5a6a8a}
+body{font-family:'Nunito',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.top-bar{width:100%;background:var(--noche);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:10px}
+.top-bar .marca{font-weight:900;font-size:1.2rem;color:white;letter-spacing:-1px}
+.top-bar .marca span{color:var(--azul-claro)}
+.container{width:100%;max-width:480px;padding:20px 16px 40px}
+.loading{text-align:center;padding:60px 20px;color:var(--suave);font-weight:700}
+.loading .spinner{width:36px;height:36px;border:3px solid var(--azul-pale);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{text-align:center;padding:60px 20px}
+.error-box .icon{font-size:3rem;margin-bottom:12px}
+.error-box h2{font-size:1.1rem;color:var(--noche);margin-bottom:6px}
+.error-box p{font-size:.85rem;color:var(--suave)}
+/* Carnet */
+.carnet{background:linear-gradient(135deg,var(--azul-medio),var(--noche));border-radius:20px;padding:24px;color:white;position:relative;overflow:hidden;margin-bottom:20px;box-shadow:0 12px 40px rgba(26,95,180,.3)}
+.carnet::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%}
+.carnet .label{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:2px}
+.carnet .plan{font-size:.9rem;font-weight:800;color:var(--azul-claro);margin-bottom:12px}
+.carnet .pet-row{display:flex;align-items:center;gap:14px}
+.carnet .pet-foto{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.35)}
+.carnet .pet-foto-ph{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.carnet .pet-name{font-size:1.4rem;font-weight:900;line-height:1}
+.carnet .pet-breed{font-size:.7rem;opacity:.6;text-transform:uppercase;letter-spacing:1px}
+.carnet .footer{margin-top:14px;border-top:1px solid rgba(255,255,255,.1);padding-top:10px;display:flex;justify-content:space-between;align-items:flex-end}
+.carnet .footer .tit-label{font-size:.58rem;opacity:.6;font-weight:700}
+.carnet .footer .tit-name{font-size:.8rem;font-weight:700}
+.carnet .footer .tit-nro{font-size:.58rem;opacity:.5;letter-spacing:1px}
+.carnet .badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border-radius:100px;padding:4px 10px;font-size:.68rem;font-weight:700}
+.carnet .badge .dot{width:6px;height:6px;background:#4ade80;border-radius:50%}
+.iso-corner{position:absolute;top:12px;right:12px;opacity:.5}
+/* Servicios */
+.section{background:white;border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid rgba(26,95,180,.08)}
+.section .stit{font-size:.8rem;font-weight:800;color:var(--noche);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+.srv-card{background:var(--fondo);border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1px solid rgba(26,95,180,.06);display:flex;align-items:center;gap:14px}
+.srv-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.srv-info{flex:1}
+.srv-name{font-size:.88rem;font-weight:800;color:var(--noche)}
+.srv-detail{font-size:.75rem;color:var(--suave);margin-top:2px}
+.srv-active{font-size:.68rem;font-weight:700;color:#22c55e;margin-top:4px}
+.btn-interest{padding:8px 16px;border:none;border-radius:100px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;background:var(--azul);color:white;white-space:nowrap;flex-shrink:0;transition:background .2s}
+.btn-interest:hover{background:var(--noche)}
+.btn-interest:disabled{opacity:.5;cursor:not-allowed}
+.btn-interest.sent{background:#dcfce7;color:#166534}
+/* Footer */
+.pub-footer{text-align:center;padding:20px;font-size:.75rem;color:var(--suave)}
+.pub-footer a{color:var(--azul);font-weight:700;text-decoration:none}
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{background:white;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.modal-box h3{font-size:1rem;font-weight:800;color:var(--noche);margin-bottom:4px}
+.modal-box p{font-size:.82rem;color:var(--suave);margin-bottom:16px}
+.modal-box .input-field{width:100%;padding:12px 14px;border:2px solid rgba(26,95,180,.15);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;color:var(--texto);background:var(--fondo);outline:none;margin-bottom:10px}
+.modal-box .input-field:focus{border-color:var(--azul-medio);background:white}
+.modal-box .btn-send{width:100%;padding:13px;background:var(--azul);color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:800;cursor:pointer}
+.modal-box .btn-send:disabled{opacity:.5;cursor:not-allowed}
+.modal-box .btn-cancel{width:100%;padding:10px;background:none;border:none;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--suave);cursor:pointer;margin-top:6px}
+.msg{font-size:.8rem;margin-top:8px;font-weight:600}
+.msg.ok{color:#22c55e}
+.msg.err{color:#ef4444}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <svg width="30" height="30" viewBox="0 0 80 80">
+    <rect width="80" height="80" rx="18" fill="rgba(255,255,255,.15)"/>
+    <circle cx="24" cy="28" r="10" fill="rgba(255,255,255,.7)"/><circle cx="56" cy="28" r="10" fill="rgba(255,255,255,.7)"/>
+    <circle cx="40" cy="44" r="22" fill="white"/>
+    <circle cx="33" cy="42" r="4" fill="white"/><circle cx="47" cy="42" r="4" fill="white"/>
+    <circle cx="34" cy="43" r="2" fill="#2272D9"/><circle cx="48" cy="43" r="2" fill="#2272D9"/>
+    <ellipse cx="40" cy="50" rx="2.5" ry="1.8" fill="#2272D9" opacity=".4"/>
+    <line x1="57" y1="11" x2="57" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="53" y1="15" x2="61" y2="15" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>
+  <div class="marca">MEDI<span>Paw</span></div>
+</div>
+
+<div class="container" id="main">
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    <div>Cargando ficha...</div>
+  </div>
+</div>
+
+<!-- Modal solicitud -->
+<div class="modal-overlay" id="modalSolicitud">
+  <div class="modal-box">
+    <h3 id="modalTitle">Me interesa</h3>
+    <p id="modalDesc">Dejanos tu nombre y te contactamos.</p>
+    <input type="text" id="solNombre" class="input-field" placeholder="Tu nombre *">
+    <input type="tel" id="solTel" class="input-field" placeholder="Tu WhatsApp o telefono *">
+    <input type="text" id="solNota" class="input-field" placeholder="Comentario (opcional)">
+    <button class="btn-send" id="btnEnviarSol" onclick="enviarSolicitud()">Enviar consulta</button>
+    <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+    <div id="solMsg" class="msg"></div>
+  </div>
+</div>
+
+<div class="pub-footer">
+  Tu mascota, siempre cuidada.<br>
+  <a href="https://medipaw.com.ar">medipaw.com.ar</a>
+</div>
+
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyBW3nLFqr55xYN16rSpapqIb6yVnyKbp-4",
+  authDomain:"medipet-c3a4d.firebaseapp.com",
+  projectId:"medipet-c3a4d",
+  storageBucket:"medipet-c3a4d.firebasestorage.app",
+  messagingSenderId:"893304150807",
+  appId:"1:893304150807:web:4563f00e1a2a856124b552"
+});
+const db = firebase.firestore();
+
+// Obtener token desde path /m/{token} o ?t={token}
+function getToken() {
+  const path = window.location.pathname;
+  const parts = path.split('/').filter(Boolean);
+  // /m/{token}
+  if (parts.length >= 2 && parts[0] === 'm') return parts[1];
+  // fallback: ?t={token}
+  return new URLSearchParams(window.location.search).get('t') || '';
+}
+
+const TOKEN = getToken();
+const container = document.getElementById('main');
+let fichaDatos = null;
+let servicioSeleccionado = null;
+
+const SRV_ICONS = {
+  salud: { icon: '🩺', bg: '#EBF3FC' },
+  descuento: { icon: '🏷️', bg: '#fef3c7' },
+  gps: { icon: '📍', bg: '#dcfce7' },
+  tienda: { icon: '🛒', bg: '#ede9fe' },
+  vacuna: { icon: '💉', bg: '#fce7f3' }
+};
+
+async function cargarFicha() {
+  if (!TOKEN) {
+    mostrarError('Enlace incompleto', 'Este enlace no contiene un identificador valido. Pedile a tu veterinaria o a MEDIPaw el enlace correcto.');
+    return;
+  }
+  try {
+    const doc = await db.collection('mascotas_publicas').doc(TOKEN).get();
+    if (!doc.exists) {
+      mostrarError('Ficha no encontrada', 'Este enlace puede haber expirado o no es valido. Si crees que es un error, contactanos.');
+      return;
+    }
+    fichaDatos = doc.data();
+    renderFicha(fichaDatos);
+  } catch(e) {
+    mostrarError('Error al cargar', 'No pudimos cargar la ficha. Intenta de nuevo en unos segundos.');
+  }
+}
+
+function mostrarError(titulo, desc) {
+  container.innerHTML = `<div class="error-box"><div class="icon">🐾</div><h2>${titulo}</h2><p>${desc}</p></div>`;
+}
+
+function renderFicha(d) {
+  const servicios = (d.servicios || []).filter(s => s.estado === 'activo' || s.estado === 'disponible');
+  const activos = servicios.filter(s => s.estado === 'activo');
+  const disponibles = servicios.filter(s => s.estado === 'disponible');
+
+  let html = `
+    <div class="carnet">
+      <div class="iso-corner">
+        <svg width="28" height="28" viewBox="0 0 80 80">
+          <rect width="80" height="80" rx="18" fill="rgba(255,255,255,.15)"/>
+          <circle cx="24" cy="28" r="10" fill="rgba(255,255,255,.5)"/><circle cx="56" cy="28" r="10" fill="rgba(255,255,255,.5)"/>
+          <circle cx="40" cy="44" r="22" fill="rgba(255,255,255,.7)"/>
+          <line x1="57" y1="11" x2="57" y2="19" stroke="rgba(255,255,255,.5)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="53" y1="15" x2="61" y2="15" stroke="rgba(255,255,255,.5)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label">PLAN</div>
+      <div class="plan">${d.plan || 'MEDIPaw'}</div>
+      <div class="pet-row">
+        ${d.foto
+          ? `<img src="${d.foto}" class="pet-foto" alt="${d.nombre}">`
+          : `<div class="pet-foto-ph">🐾</div>`}
+        <div>
+          <div class="pet-name">${d.nombre || '—'}</div>
+          <div class="pet-breed">${d.raza || ''}</div>
+        </div>
+      </div>
+      <div class="footer">
+        <div>
+          <div class="tit-label">TITULAR</div>
+          <div class="tit-name">${d.titularNombre || ''}</div>
+          ${d.nroSocio ? `<div class="tit-nro">${d.nroSocio}</div>` : ''}
+        </div>
+        <div class="badge"><span class="dot"></span> ${d.estado === 'activo' ? 'Activo' : d.estado || 'Activo'}</div>
+      </div>
+    </div>`;
+
+  // Servicios activos
+  if (activos.length > 0) {
+    html += `<div class="section"><div class="stit">Servicios incluidos</div>`;
+    activos.forEach(s => {
+      const ic = SRV_ICONS[s.key] || { icon: '✦', bg: '#EBF3FC' };
+      html += `
+        <div class="srv-card">
+          <div class="srv-icon" style="background:${ic.bg}">${ic.icon}</div>
+          <div class="srv-info">
+            <div class="srv-name">${s.nombre}</div>
+            ${s.detalle ? `<div class="srv-detail">${s.detalle}</div>` : ''}
+            <div class="srv-active">Incluido en tu plan</div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Servicios disponibles
+  if (disponibles.length > 0) {
+    html += `<div class="section"><div class="stit">Servicios disponibles</div>`;
+    disponibles.forEach(s => {
+      const ic = SRV_ICONS[s.key] || { icon: '✦', bg: '#EBF3FC' };
+      html += `
+        <div class="srv-card">
+          <div class="srv-icon" style="background:${ic.bg}">${ic.icon}</div>
+          <div class="srv-info">
+            <div class="srv-name">${s.nombre}</div>
+            ${s.detalle ? `<div class="srv-detail">${s.detalle}</div>` : ''}
+          </div>
+          <button class="btn-interest" id="btn-${s.key}" onclick="abrirModal('${s.key}','${s.nombre.replace(/'/g,"\\'")}')">Me interesa</button>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Info de mascota
+  html += `<div class="section"><div class="stit">Datos de la mascota</div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:.85rem;">
+      ${d.nombre ? `<div><strong>Nombre:</strong> ${d.nombre}</div>` : ''}
+      ${d.raza ? `<div><strong>Raza:</strong> ${d.raza}</div>` : ''}
+      ${d.fechaNacimiento ? `<div><strong>Nacimiento:</strong> ${d.fechaNacimiento}</div>` : ''}
+      ${d.mascotaId ? `<div><strong>ID:</strong> <span style="font-family:monospace;color:var(--azul);font-weight:700;">${d.mascotaId}</span></div>` : ''}
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+function abrirModal(key, nombre) {
+  servicioSeleccionado = key;
+  document.getElementById('modalTitle').textContent = nombre;
+  document.getElementById('modalDesc').textContent = 'Dejanos tus datos y te contactamos para activar este servicio.';
+  document.getElementById('solMsg').textContent = '';
+  document.getElementById('solNombre').value = '';
+  document.getElementById('solTel').value = '';
+  document.getElementById('solNota').value = '';
+  document.getElementById('btnEnviarSol').disabled = false;
+  document.getElementById('btnEnviarSol').textContent = 'Enviar consulta';
+  document.getElementById('modalSolicitud').classList.add('active');
+}
+
+function cerrarModal() {
+  document.getElementById('modalSolicitud').classList.remove('active');
+  servicioSeleccionado = null;
+}
+
+async function enviarSolicitud() {
+  const nombre = (document.getElementById('solNombre').value || '').trim();
+  const tel = (document.getElementById('solTel').value || '').trim();
+  const nota = (document.getElementById('solNota').value || '').trim();
+  const msgEl = document.getElementById('solMsg');
+  const btn = document.getElementById('btnEnviarSol');
+
+  if (!nombre || !tel) {
+    msgEl.textContent = 'Completa tu nombre y telefono.';
+    msgEl.className = 'msg err';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    await db.collection('solicitudes').add({
+      token: TOKEN,
+      mascotaId: fichaDatos?.mascotaId || '',
+      mascotaNombre: fichaDatos?.nombre || '',
+      nroSocio: fichaDatos?.nroSocio || '',
+      servicioKey: servicioSeleccionado,
+      solicitanteNombre: nombre,
+      solicitanteTel: tel,
+      nota: nota,
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    msgEl.textContent = 'Consulta enviada. Te vamos a contactar pronto.';
+    msgEl.className = 'msg ok';
+    btn.textContent = 'Enviado';
+
+    // Marcar boton como enviado
+    const btnCard = document.getElementById('btn-' + servicioSeleccionado);
+    if (btnCard) {
+      btnCard.textContent = 'Enviado';
+      btnCard.classList.add('sent');
+      btnCard.disabled = true;
+    }
+
+    setTimeout(cerrarModal, 2000);
+  } catch(e) {
+    msgEl.textContent = 'Error al enviar. Intenta de nuevo.';
+    msgEl.className = 'msg err';
+    btn.disabled = false;
+    btn.textContent = 'Enviar consulta';
+  }
+}
+
+// Iniciar
+cargarFicha();
+</script>
+</body>
+</html>
