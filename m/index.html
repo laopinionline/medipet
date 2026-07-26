@@ -170,13 +170,29 @@ function mostrarError(titulo, desc) {
   container.innerHTML = `<div class="error-box"><div class="icon">🐾</div><h2>${titulo}</h2><p>${desc}</p></div>`;
 }
 
+// Crea un elemento con clase/estilo y TEXTO seguro (textContent: nunca interpreta HTML).
+// Usar SIEMPRE para valores que vengan de la mascota/titular — evita XSS almacenado en esta página pública.
+function mk(tag, opts) {
+  const e = document.createElement(tag);
+  if (opts) {
+    if (opts.cls != null) e.className = opts.cls;
+    if (opts.style != null) e.setAttribute('style', opts.style);
+    if (opts.text != null) e.textContent = opts.text; // <- escapado por el DOM
+  }
+  return e;
+}
+
 function renderFicha(d) {
   const servicios = (d.servicios || []).filter(s => s.estado === 'activo' || s.estado === 'disponible');
   const activos = servicios.filter(s => s.estado === 'activo');
   const disponibles = servicios.filter(s => s.estado === 'disponible');
 
-  let html = `
-    <div class="carnet">
+  const frag = document.createDocumentFragment();
+
+  // ── Carnet ──
+  const carnet = mk('div', { cls: 'carnet' });
+  // Solo markup ESTÁTICO por innerHTML (sin datos de la mascota):
+  carnet.innerHTML = `
       <div class="iso-corner">
         <svg width="28" height="28" viewBox="0 0 80 80">
           <rect width="80" height="80" rx="18" fill="rgba(255,255,255,.15)"/>
@@ -186,74 +202,97 @@ function renderFicha(d) {
           <line x1="53" y1="15" x2="61" y2="15" stroke="rgba(255,255,255,.5)" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="label">PLAN</div>
-      <div class="plan">${d.plan || 'MEDIPaw'}</div>
-      <div class="pet-row">
-        ${d.foto
-          ? `<img src="${d.foto}" class="pet-foto" alt="${d.nombre}">`
-          : `<div class="pet-foto-ph">🐾</div>`}
-        <div>
-          <div class="pet-name">${d.nombre || '—'}</div>
-          <div class="pet-breed">${d.raza || ''}</div>
-        </div>
-      </div>
-      <div class="footer">
-        <div>
-          <div class="tit-label">TITULAR</div>
-          <div class="tit-name">${d.titularNombre || ''}</div>
-          ${d.nroSocio ? `<div class="tit-nro">${d.nroSocio}</div>` : ''}
-        </div>
-        <div class="badge"><span class="dot"></span> ${d.estado === 'activo' ? 'Activo' : d.estado || 'Activo'}</div>
-      </div>
-    </div>`;
+      <div class="label">PLAN</div>`;
+  carnet.appendChild(mk('div', { cls: 'plan', text: d.plan || 'MEDIPaw' }));
+
+  const petRow = mk('div', { cls: 'pet-row' });
+  if (d.foto) {
+    const img = mk('img', { cls: 'pet-foto' });
+    img.src = d.foto;            // property assignment: sin breakout de atributo; <img> no ejecuta esquemas javascript:
+    img.alt = d.nombre || '';    // property: escapado
+    petRow.appendChild(img);
+  } else {
+    petRow.appendChild(mk('div', { cls: 'pet-foto-ph', text: '🐾' }));
+  }
+  const petCol = mk('div');
+  petCol.appendChild(mk('div', { cls: 'pet-name', text: d.nombre || '—' }));
+  petCol.appendChild(mk('div', { cls: 'pet-breed', text: d.raza || '' }));
+  petRow.appendChild(petCol);
+  carnet.appendChild(petRow);
+
+  const footer = mk('div', { cls: 'footer' });
+  const titCol = mk('div');
+  titCol.appendChild(mk('div', { cls: 'tit-label', text: 'TITULAR' }));
+  titCol.appendChild(mk('div', { cls: 'tit-name', text: d.titularNombre || '' }));
+  if (d.nroSocio) titCol.appendChild(mk('div', { cls: 'tit-nro', text: d.nroSocio }));
+  footer.appendChild(titCol);
+  const badge = mk('div', { cls: 'badge' });
+  badge.innerHTML = '<span class="dot"></span> ';
+  badge.appendChild(document.createTextNode(d.estado === 'activo' ? 'Activo' : (d.estado || 'Activo')));
+  footer.appendChild(badge);
+  carnet.appendChild(footer);
+  frag.appendChild(carnet);
+
+  // ── Tarjeta de servicio (helper) ──
+  function srvCard(s, incluido) {
+    const ic = SRV_ICONS[s.key] || { icon: '✦', bg: '#EBF3FC' };
+    const card = mk('div', { cls: 'srv-card' });
+    card.appendChild(mk('div', { cls: 'srv-icon', style: 'background:' + ic.bg, text: ic.icon }));
+    const info = mk('div', { cls: 'srv-info' });
+    info.appendChild(mk('div', { cls: 'srv-name', text: s.nombre }));
+    if (s.detalle) info.appendChild(mk('div', { cls: 'srv-detail', text: s.detalle }));
+    if (incluido) info.appendChild(mk('div', { cls: 'srv-active', text: 'Incluido en tu plan' }));
+    card.appendChild(info);
+    return card;
+  }
 
   // Servicios activos
   if (activos.length > 0) {
-    html += `<div class="section"><div class="stit">Servicios incluidos</div>`;
-    activos.forEach(s => {
-      const ic = SRV_ICONS[s.key] || { icon: '✦', bg: '#EBF3FC' };
-      html += `
-        <div class="srv-card">
-          <div class="srv-icon" style="background:${ic.bg}">${ic.icon}</div>
-          <div class="srv-info">
-            <div class="srv-name">${s.nombre}</div>
-            ${s.detalle ? `<div class="srv-detail">${s.detalle}</div>` : ''}
-            <div class="srv-active">Incluido en tu plan</div>
-          </div>
-        </div>`;
-    });
-    html += `</div>`;
+    const sec = mk('div', { cls: 'section' });
+    sec.appendChild(mk('div', { cls: 'stit', text: 'Servicios incluidos' }));
+    activos.forEach(s => sec.appendChild(srvCard(s, true)));
+    frag.appendChild(sec);
   }
 
   // Servicios disponibles
   if (disponibles.length > 0) {
-    html += `<div class="section"><div class="stit">Servicios disponibles</div>`;
+    const sec = mk('div', { cls: 'section' });
+    sec.appendChild(mk('div', { cls: 'stit', text: 'Servicios disponibles' }));
     disponibles.forEach(s => {
-      const ic = SRV_ICONS[s.key] || { icon: '✦', bg: '#EBF3FC' };
-      html += `
-        <div class="srv-card">
-          <div class="srv-icon" style="background:${ic.bg}">${ic.icon}</div>
-          <div class="srv-info">
-            <div class="srv-name">${s.nombre}</div>
-            ${s.detalle ? `<div class="srv-detail">${s.detalle}</div>` : ''}
-          </div>
-          <button class="btn-interest" id="btn-${s.key}" onclick="abrirModal('${s.key}','${s.nombre.replace(/'/g,"\\'")}')">Me interesa</button>
-        </div>`;
+      const card = srvCard(s, false);
+      const btn = mk('button', { cls: 'btn-interest', text: 'Me interesa' });
+      btn.id = 'btn-' + s.key;
+      btn.addEventListener('click', () => abrirModal(s.key, s.nombre)); // sin interpolar en HTML
+      card.appendChild(btn);
+      sec.appendChild(card);
     });
-    html += `</div>`;
+    frag.appendChild(sec);
   }
 
-  // Info de mascota
-  html += `<div class="section"><div class="stit">Datos de la mascota</div>
-    <div style="display:flex;flex-direction:column;gap:8px;font-size:.85rem;">
-      ${d.nombre ? `<div><strong>Nombre:</strong> ${d.nombre}</div>` : ''}
-      ${d.raza ? `<div><strong>Raza:</strong> ${d.raza}</div>` : ''}
-      ${d.fechaNacimiento ? `<div><strong>Nacimiento:</strong> ${d.fechaNacimiento}</div>` : ''}
-      ${d.mascotaId ? `<div><strong>ID:</strong> <span style="font-family:monospace;color:var(--azul);font-weight:700;">${d.mascotaId}</span></div>` : ''}
-    </div>
-  </div>`;
+  // ── Datos de la mascota ──
+  const sec = mk('div', { cls: 'section' });
+  sec.appendChild(mk('div', { cls: 'stit', text: 'Datos de la mascota' }));
+  const list = mk('div', { style: 'display:flex;flex-direction:column;gap:8px;font-size:.85rem;' });
+  function fila(label, valor, mono) {
+    const row = mk('div');
+    row.appendChild(mk('strong', { text: label }));
+    row.appendChild(document.createTextNode(' '));
+    if (mono) {
+      row.appendChild(mk('span', { style: 'font-family:monospace;color:var(--azul);font-weight:700;', text: valor }));
+    } else {
+      row.appendChild(document.createTextNode(valor));
+    }
+    return row;
+  }
+  if (d.nombre) list.appendChild(fila('Nombre:', d.nombre, false));
+  if (d.raza) list.appendChild(fila('Raza:', d.raza, false));
+  if (d.fechaNacimiento) list.appendChild(fila('Nacimiento:', d.fechaNacimiento, false));
+  if (d.mascotaId) list.appendChild(fila('ID:', d.mascotaId, true));
+  sec.appendChild(list);
+  frag.appendChild(sec);
 
-  container.innerHTML = html;
+  container.innerHTML = '';
+  container.appendChild(frag);
 }
 
 function abrirModal(key, nombre) {
